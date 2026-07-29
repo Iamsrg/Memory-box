@@ -20,7 +20,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background-color: var(--bg-dark);
+  background: radial-gradient(circle at 50% 10%, #1a2332 0%, #0a0c10 100%);
   color: var(--text-main);
   font-family: var(--font-family);
   min-height: 100vh;
@@ -30,95 +30,128 @@ body {
   overflow-x: hidden;
 }
 
-header { text-align: center; padding: 2rem 1rem 1rem 1rem; max-width: 800px; }
+header { text-align: center; padding: 2.5rem 1rem 1rem 1rem; max-width: 800px; }
 
 .title-glow {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: 800;
   background: linear-gradient(135deg, #00f3ff, #ff2a6d, #ffc107);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(0, 243, 255, 0.4), 0 0 40px rgba(255, 42, 109, 0.3);
 }
 
-.subtitle { color: #8b949e; font-size: 0.95rem; }
+.subtitle { color: #a3b18a; font-size: 0.95rem; }
 
 .back-btn {
   display: inline-block;
-  margin: 1rem 0;
-  padding: 0.5rem 1.2rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 1.2rem 0;
+  padding: 0.6rem 1.4rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 30px;
   color: #fff;
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 600;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
 }
 
 .portal-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.8rem;
   width: 90%;
   max-width: 1100px;
-  padding: 1.5rem 0;
+  padding: 2rem 0;
 }
 
 .portal-card {
   background: var(--card-bg);
   border-radius: 20px;
-  padding: 1.8rem;
+  padding: 2rem;
   text-align: center;
   text-decoration: none;
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.portal-card:hover { transform: translateY(-8px); }
-.portal-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+.portal-card:hover { transform: translateY(-10px) scale(1.02); }
+.portal-icon { font-size: 3.5rem; margin-bottom: 1rem; transition: transform 0.3s; }
+.portal-card:hover .portal-icon { transform: scale(1.18) rotate(5deg); }
 
-.ironman-theme { border-color: var(--ironman-red); }
-.spidey-theme { border-color: var(--spidey-red); }
-.strange-theme { border-color: var(--strange-gold); }
-.cap-theme { border-color: var(--cap-red); }
-.loki-theme { border-color: var(--loki-green); }
+/* Glowing Marvel Card Themes */
+.ironman-theme { border-color: rgba(229, 9, 20, 0.6); }
+.ironman-theme:hover { box-shadow: 0 0 30px var(--ironman-cyan), inset 0 0 15px rgba(229, 9, 20, 0.4); }
+
+.spidey-theme { border-color: rgba(255, 42, 109, 0.6); }
+.spidey-theme:hover { box-shadow: 0 0 30px var(--spidey-red), inset 0 0 15px rgba(5, 213, 232, 0.4); }
+
+.strange-theme { border-color: rgba(255, 184, 0, 0.6); }
+.strange-theme:hover { box-shadow: 0 0 30px var(--strange-gold), inset 0 0 15px rgba(157, 78, 221, 0.4); }
+
+.cap-theme { border-color: rgba(230, 57, 70, 0.6); }
+.cap-theme:hover { box-shadow: 0 0 30px var(--cap-blue), inset 0 0 15px rgba(230, 57, 70, 0.4); }
+
+.loki-theme { border-color: rgba(0, 230, 118, 0.6); }
+.loki-theme:hover { box-shadow: 0 0 30px var(--loki-green), inset 0 0 15px rgba(255, 193, 7, 0.4); }
 
 .content-container {
   width: 90%;
   max-width: 850px;
   background: var(--card-bg);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 2.2rem;
   margin-bottom: 3rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
   text-align: center;
   position: relative;
 }
 
 /* Iron Man Arc Reactor */
 .arc-reactor {
-  width: 130px;
-  height: 130px;
+  width: 135px;
+  height: 135px;
   border-radius: 50%;
   border: 8px solid var(--ironman-cyan);
   margin: 1.5rem auto;
-  box-shadow: 0 0 25px var(--ironman-cyan);
+  box-shadow: 0 0 30px var(--ironman-cyan), inset 0 0 20px var(--ironman-cyan);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s;
+  animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(0.98); box-shadow: 0 0 20px var(--ironman-cyan); }
+  100% { transform: scale(1.05); box-shadow: 0 0 40px var(--ironman-cyan), inset 0 0 25px var(--ironman-cyan); }
 }
 
 .arc-reactor.max-power {
   border-color: var(--ironman-gold);
-  box-shadow: 0 0 40px var(--ironman-gold), 0 0 80px var(--ironman-red);
-  animation: maxPulse 1s infinite alternate;
+  box-shadow: 0 0 50px var(--ironman-gold), 0 0 90px var(--ironman-red);
+  animation: maxPulse 0.8s infinite alternate;
 }
 
 @keyframes maxPulse {
@@ -126,22 +159,23 @@ header { text-align: center; padding: 2rem 1rem 1rem 1rem; max-width: 800px; }
   100% { transform: scale(1.08); }
 }
 
-.arc-inner { font-weight: 800; font-size: 1.2rem; color: #fff; }
+.arc-inner { font-weight: 800; font-size: 1.3rem; color: #fff; text-shadow: 0 0 10px var(--ironman-cyan); }
 
 .jarvis-box {
   text-align: left;
-  background: rgba(0,243,255,0.05);
-  padding: 1.2rem;
+  background: rgba(0, 243, 255, 0.06);
+  padding: 1.3rem;
   border-radius: 12px;
   border-left: 4px solid var(--ironman-cyan);
   margin-top: 1.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* Cap Accord Stamp Effect */
 .accord-box {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   border: 2px dashed var(--cap-red);
-  padding: 1.5rem;
+  padding: 1.6rem;
   border-radius: 15px;
   margin: 1.5rem 0;
   text-align: left;
@@ -156,22 +190,23 @@ header { text-align: center; padding: 2rem 1rem 1rem 1rem; max-width: 800px; }
   transform: translate(-50%, -50%) scale(3) rotate(-15deg);
   opacity: 0;
   color: var(--cap-red);
-  border: 5px solid var(--cap-red);
+  border: 6px solid var(--cap-red);
   padding: 0.5rem 1.5rem;
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 900;
   text-transform: uppercase;
-  border-radius: 10px;
+  border-radius: 12px;
   pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 0 20px rgba(230, 57, 70, 0.6);
+  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .shield-stamp.stamped {
-  opacity: 0.9;
+  opacity: 0.95;
   transform: translate(-50%, -50%) scale(1) rotate(-15deg);
 }
 
-/* Spider-Man 3D Photo Flip Cards */
+/* Spider-Man 3D Photo Flip Cards & Photo Fitting */
 .spidey-photo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -181,7 +216,7 @@ header { text-align: center; padding: 2rem 1rem 1rem 1rem; max-width: 800px; }
 
 .flip-card {
   background-color: transparent;
-  height: 270px;
+  height: 285px;
   perspective: 1000px;
   cursor: pointer;
 }
@@ -202,24 +237,35 @@ header { text-align: center; padding: 2rem 1rem 1rem 1rem; max-width: 800px; }
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  border-radius: 14px;
+  border-radius: 15px;
   padding: 0.8rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
 }
 
 .flip-front { background: #ffffff; color: #111; }
-.flip-back { background: var(--spidey-red); color: #fff; transform: rotateY(180deg); justify-content: center; }
+.flip-back {
+  background: linear-gradient(135deg, var(--spidey-red), #b7094c);
+  color: #fff;
+  transform: rotateY(180deg);
+  justify-content: center;
+  padding: 1.2rem;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+}
 
+/* Clean image fitting without stretching */
 .photo-img {
   width: 100%;
-  height: 170px;
+  height: 180px;
   object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  object-position: center;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  background-color: #f0f0f0;
 }
 
 /* Doctor Strange Slider */
@@ -233,11 +279,12 @@ header { text-align: center; padding: 2rem 1rem 1rem 1rem; max-width: 800px; }
 
 .time-card {
   min-height: 120px;
-  padding: 1.2rem;
+  padding: 1.3rem;
   background: rgba(255, 184, 0, 0.08);
   border: 1px solid var(--strange-gold);
   border-radius: 12px;
   margin-top: 1rem;
+  box-shadow: 0 0 20px rgba(255, 184, 0, 0.15);
 }
 
 /* Loki Multiversal Tree Branch Layout */
@@ -276,7 +323,7 @@ header { text-align: center; padding: 2rem 1rem 1rem 1rem; max-width: 800px; }
   border: 2px solid var(--loki-green);
   border-radius: 15px;
   padding: 1.2rem;
-  box-shadow: 0 0 15px rgba(0, 230, 118, 0.2);
+  box-shadow: 0 0 18px rgba(0, 230, 118, 0.25);
   transition: all 0.4s ease;
 }
 
@@ -333,6 +380,7 @@ header { text-align: center; padding: 2rem 1rem 1rem 1rem; max-width: 800px; }
   font-size: 0.75rem;
   letter-spacing: 1px;
   margin-top: 0.5rem;
+  box-shadow: 0 0 10px rgba(255, 85, 0, 0.5);
 }
 
 @media (max-width: 650px) {
@@ -347,17 +395,21 @@ header { text-align: center; padding: 2rem 1rem 1rem 1rem; max-width: 800px; }
   background: linear-gradient(135deg, var(--spidey-red), #b7094c);
   color: white;
   border: none;
-  padding: 0.8rem 1.8rem;
+  padding: 0.85rem 1.9rem;
   font-size: 1rem;
   font-weight: bold;
   border-radius: 30px;
   cursor: pointer;
-  transition: transform 0.2s;
+  box-shadow: 0 5px 20px rgba(255, 42, 109, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.action-btn:hover { transform: scale(1.05); }
+.action-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(255, 42, 109, 0.6);
+}
 
-/* Web Shooter Canvas */
+/* Web Shooter Overlay Canvas */
 #spidey-canvas {
   position: fixed;
   top: 0;

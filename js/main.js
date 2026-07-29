@@ -103,7 +103,7 @@ class SuperheroAudio {
 
 const audio = new SuperheroAudio();
 
-// --- SPIDER-MAN HEXAGONAL SPIDER-WEB ANIMATION ---
+// --- SPIDER-MAN WEB SHOOTER (BLACK SCREEN HOLD + SMOOTH FADE BACK) ---
 function shootWebSorry() {
   audio.playSpidey();
   let canvas = document.getElementById('spidey-canvas');
@@ -118,16 +118,21 @@ function shootWebSorry() {
   const maxRadius = Math.min(canvas.width, canvas.height) * 0.42;
 
   let progress = 0;
+  let alpha = 1.0;
 
   function drawHexWeb() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+
+    // 1. Draw solid dark backdrop
+    ctx.fillStyle = `rgba(10, 12, 16, ${alpha})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 2. Draw Hexagonal Web Lines
+    ctx.strokeStyle = `rgba(255, 255, 255, ${0.9 * alpha})`;
     ctx.shadowColor = "#00f3ff";
     ctx.shadowBlur = 12;
     ctx.lineWidth = 3;
 
-    // 1. Draw 6 Radial Spokes (Hexagonal axes)
     for (let i = 0; i < 6; i++) {
       const angle = (i * Math.PI) / 3;
       const x = cx + Math.cos(angle) * maxRadius * Math.min(progress, 1);
@@ -139,12 +144,11 @@ function shootWebSorry() {
       ctx.stroke();
     }
 
-    // 2. Draw Concentric Hexagonal Rings
     if (progress > 0.3) {
       const ringProgress = Math.min((progress - 0.3) / 0.7, 1);
       const ringCount = 5;
 
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
+      ctx.strokeStyle = `rgba(255, 255, 255, ${0.7 * alpha})`;
       ctx.lineWidth = 2;
 
       for (let r = 1; r <= ringCount; r++) {
@@ -164,22 +168,39 @@ function shootWebSorry() {
       }
     }
 
-    // 3. Reveal Glowing Center Text "I AM SORRY!"
+    // 3. Display Glowing Text
     if (progress >= 1) {
       ctx.shadowColor = "#ff2a6d";
       ctx.shadowBlur = 30;
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
       ctx.font = "900 clamp(2rem, 5vw, 3.8rem) 'Poppins', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("🕸️ I AM SORRY! 🕷️", cx, cy);
 
+      // STAY ON BLACK SCREEN FOR 1 SECOND, THEN SMOOTHLY FADE BACK
       setTimeout(() => {
-        let fade = setInterval(() => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          clearInterval(fade);
-        }, 3000);
-      }, 1200);
+        let fadeInterval = setInterval(() => {
+          alpha -= 0.05;
+          
+          if (alpha <= 0) {
+            clearInterval(fadeInterval);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = `rgba(10, 12, 16, ${alpha})`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.shadowColor = "#ff2a6d";
+            ctx.shadowBlur = 30;
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.font = "900 clamp(2rem, 5vw, 3.8rem) 'Poppins', sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("🕸️ I AM SORRY! 🕷️", cx, cy);
+          }
+        }, 30);
+      }, 1000);
       return;
     }
 
