@@ -1,0 +1,797 @@
+const fs = require('fs');
+const path = require('path');
+
+const files = {
+  'package.json': `{
+  "name": "memory-box",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.3",
+    "gsap": "^3.12.5",
+    "howler": "^2.2.4",
+    "lenis": "^1.1.9",
+    "lottie-web": "^5.12.2",
+    "swiper": "^11.1.4"
+  },
+  "devDependencies": {
+    "vite": "^5.3.1"
+  }
+}`,
+
+  'vite.config.js': `import { defineConfig } from 'vite';
+
+export default defineConfig({
+  root: '.',
+  publicDir: 'public',
+  server: {
+    port: 3000,
+    open: true,
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    minify: 'terser',
+  },
+});`,
+
+  'index.html': `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory Box | A Multiverse Journey</title>
+  <meta name="description" content="An emotional cinematic experience celebrating memories, friendship, and eternal bonds." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Orbitron:wght@400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/css/variables.css" />
+  <link rel="stylesheet" href="./src/css/main.css" />
+  <link rel="stylesheet" href="./src/css/glassmorphism.css" />
+  <link rel="stylesheet" href="./src/css/scenes.css" />
+  <link rel="stylesheet" href="./src/css/responsive.css" />
+</head>
+<body class="bg-black text-white overflow-hidden select-none">
+  <canvas id="bg-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+  <div id="audio-control" class="fixed top-6 right-6 z-50 flex items-center gap-3"></div>
+  <main id="app-viewport" class="relative w-full h-screen overflow-hidden">
+    <section id="scene-opening" class="scene active flex flex-col items-center justify-center min-h-screen text-center px-6"></section>
+    <section id="scene-hub" class="scene hidden absolute inset-0 flex flex-col items-center justify-between py-10 px-6"></section>
+    <section id="scene-web-realm" class="scene hidden absolute inset-0 py-8 px-6"></section>
+    <section id="scene-arcane-library" class="scene hidden absolute inset-0 py-8 px-6"></section>
+    <section id="scene-innovation-lab" class="scene hidden absolute inset-0 py-8 px-6"></section>
+    <section id="scene-legacy-hall" class="scene hidden absolute inset-0 py-8 px-6"></section>
+    <section id="scene-illusion-gallery" class="scene hidden absolute inset-0 py-8 px-6"></section>
+    <section id="scene-final-portal" class="scene hidden absolute inset-0 py-8 px-6 flex flex-col items-center justify-center text-center"></section>
+  </main>
+  <div id="modal-container" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"></div>
+  <script type="module" src="./src/js/app.js"></script>
+</body>
+</html>`,
+
+  'public/data/memories.json': `[
+  {
+    "id": "mem-1",
+    "title": "Midnight Coffee & Grand Ideas",
+    "date": "October 14",
+    "heroTag": "Web Weaver",
+    "description": "Remember when we stayed up until 4 AM fixing that impossible code bug and dreaming about building our own digital worlds?",
+    "tag": "Late Night Musings",
+    "accentColor": "#ff0055",
+    "coordinates": { "x": 20, "y": 30 }
+  },
+  {
+    "id": "mem-2",
+    "title": "The Unplanned Roadtrip",
+    "date": "July 22",
+    "heroTag": "Web Weaver",
+    "description": "We took a wrong exit, got lost in the rain, and ended up finding that rooftop café with the best sunset view.",
+    "tag": "Adventures",
+    "accentColor": "#ff0055",
+    "coordinates": { "x": 75, "y": 25 }
+  },
+  {
+    "id": "mem-3",
+    "title": "The Great Stargazing Fail",
+    "date": "December 03",
+    "heroTag": "Web Weaver",
+    "description": "Drove two hours into the mountains to watch meteor showers, only for thick clouds to cover the sky. We ate cold tacos and laughed all night.",
+    "tag": "Unforgettable",
+    "accentColor": "#ff0055",
+    "coordinates": { "x": 45, "y": 65 }
+  }
+]`,
+
+  'public/data/compliments.json': `[
+  {
+    "id": "comp-1",
+    "mirrorTitle": "Refinement of Truth",
+    "hiddenText": "You hold a rare kind of loyalty that never flickers, even when everything else changes.",
+    "rune": "ᛚᚢᛗᛟᛞ"
+  },
+  {
+    "id": "comp-2",
+    "mirrorTitle": "Echo of Courage",
+    "hiddenText": "Your quiet determination has inspired me to keep building when I wanted to quit.",
+    "rune": "ᚠᛟᚱᛏᛁᛋ"
+  },
+  {
+    "id": "comp-3",
+    "mirrorTitle": "Prism of Brilliance",
+    "hiddenText": "You see creative solutions where everyone else sees dead ends.",
+    "rune": "ᛋᛈᚨᚱᚲ"
+  },
+  {
+    "id": "comp-4",
+    "mirrorTitle": "Unwavering Armor",
+    "hiddenText": "You forgive deeply and love fiercely. That is your true superpower.",
+    "rune": "ᚨᛖᚧᛁᛋ"
+  }
+]`,
+
+  'public/data/promises.json': `[
+  {
+    "id": "prom-1",
+    "title": "Unconditional Presence",
+    "detail": "I promise to always listen first, step past ego, and protect our bond through every realm of life."
+  },
+  {
+    "id": "prom-2",
+    "title": "Honesty & Clarity",
+    "detail": "No unspoken doubts. I promise transparency, vulnerability, and clear communication whenever missteps occur."
+  },
+  {
+    "id": "prom-3",
+    "title": "Endless Support",
+    "detail": "Whatever dream you chase next, I will be in your corner, cheering loudest from the front row."
+  }
+]`,
+
+  'public/data/playlist.json': `[
+  { "title": "Celestial Dawn", "artist": "Memory Box OST", "duration": "3:42" },
+  { "title": "Arcane Whispers", "artist": "Memory Box OST", "duration": "4:15" },
+  { "title": "Quantum Resonance", "artist": "Memory Box OST", "duration": "2:58" },
+  { "title": "Eternal Guardian", "artist": "Memory Box OST", "duration": "5:10" }
+]`,
+
+  'public/data/letter.json': `{
+  "salutation": "To My Greatest Ally,",
+  "paragraphs": [
+    "I built this sanctuary across time and dimensions because standard words felt far too small for what I need to tell you.",
+    "I am deeply sorry for the moment I let you down. Friendship isn't tested in times of effortless smooth sailing; it is proven when missteps happen, and we choose to rebuild stronger than before.",
+    "You have been my co-pilot through countless chapters, my sounding board, and the person who brings genuine magic into every ordinary moment. I never want my mistakes to dim that light.",
+    "Please accept this multiverse journey as my genuine apology and a living vault of how much you mean to me. Every realm inside reflects a piece of your spirit."
+  ],
+  "closing": "Forever your friend,",
+  "signature": "Your Eternal Teammate"
+}`,
+
+  'src/css/variables.css': `:root {
+  --bg-color: #030308;
+  --color-primary: #8a2be2;
+  --color-accent-web: #ff0055;
+  --color-accent-arcane: #9d4edd;
+  --color-accent-lab: #00f0ff;
+  --color-accent-legacy: #ffaa00;
+  --color-accent-illusion: #00ff88;
+  --glass-bg: rgba(18, 18, 28, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-glow: rgba(138, 43, 226, 0.25);
+  --font-heading: 'Cinzel', serif;
+  --font-hud: 'Orbitron', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}`,
+
+  'src/css/main.css': `@import './variables.css';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  font-family: var(--font-body);
+  color: #f0f0f5;
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  letter-spacing: 0.05em;
+}
+
+.hud-title {
+  font-family: var(--font-hud);
+  letter-spacing: 0.1em;
+}
+
+.scene {
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+  width: 100%;
+  height: 100%;
+}
+
+.scene.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.96);
+  display: none !important;
+}
+
+.scene.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+  display: flex !important;
+}`,
+
+  'src/css/glassmorphism.css': `.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+}
+
+.glass-btn {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-family: var(--font-hud);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.neon-glow-web { box-shadow: 0 0 25px rgba(255, 0, 85, 0.4); border-color: rgba(255, 0, 85, 0.6); }
+.neon-glow-arcane { box-shadow: 0 0 25px rgba(157, 78, 221, 0.4); border-color: rgba(157, 78, 221, 0.6); }
+.neon-glow-lab { box-shadow: 0 0 25px rgba(0, 240, 255, 0.4); border-color: rgba(0, 240, 255, 0.6); }
+.neon-glow-legacy { box-shadow: 0 0 25px rgba(255, 170, 0, 0.4); border-color: rgba(255, 170, 0, 0.6); }
+.neon-glow-illusion { box-shadow: 0 0 25px rgba(0, 255, 136, 0.4); border-color: rgba(0, 255, 136, 0.6); }`,
+
+  'src/css/scenes.css': `.portal-card {
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease;
+  cursor: pointer;
+}
+
+.portal-card:hover {
+  transform: translateY(-12px) scale(1.03);
+}
+
+.portal-card.visited {
+  border-color: rgba(0, 255, 136, 0.6);
+}
+
+.portal-card.visited::after {
+  content: "✓ COMPLETED";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: var(--font-hud);
+  font-size: 0.65rem;
+  color: #00ff88;
+  letter-spacing: 0.1em;
+}
+
+.mirror-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.mirror-card .secret-overlay {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(circle at center, rgba(0,255,136,0.25) 0%, rgba(0,0,0,0.9) 100%);
+}
+
+.mirror-card:hover .secret-overlay {
+  opacity: 1;
+}`,
+
+  'src/css/responsive.css': `@media (max-width: 768px) {
+  .hub-grid {
+    grid-template-columns: repeat(1, 1fr) !important;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}`,
+
+  'src/js/audio.js': `import { Howler } from 'howler';
+
+class AudioManager {
+  constructor() {
+    this.muted = false;
+    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  playSynthTone(freq = 440, type = 'sine', duration = 0.3) {
+    if (this.muted || !this.ctx) return;
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+      gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start();
+      osc.stop(this.ctx.currentTime + duration);
+    } catch (e) {
+      console.warn("AudioContext blocked");
+    }
+  }
+
+  playPortalHum() { this.playSynthTone(150, 'sawtooth', 0.8); }
+  playClick() { this.playSynthTone(800, 'sine', 0.1); }
+  playMagicSparkle() {
+    this.playSynthTone(1200, 'sine', 0.15);
+    setTimeout(() => this.playSynthTone(1600, 'sine', 0.15), 80);
+  }
+
+  toggleMute() {
+    this.muted = !this.muted;
+    Howler.mute(this.muted);
+    return this.muted;
+  }
+}
+
+export const audioManager = new AudioManager();`,
+
+  'src/js/particles.js': `export class ParticleEngine {
+  constructor(canvasId) {
+    this.canvas = document.getElementById(canvasId);
+    this.ctx = this.canvas.getContext('2d');
+    this.particles = [];
+    this.theme = 'default';
+    this.resize();
+
+    window.addEventListener('resize', () => this.resize());
+    this.animate = this.animate.bind(this);
+    this.initParticles();
+    requestAnimationFrame(this.animate);
+  }
+
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  }
+
+  setTheme(theme) {
+    this.theme = theme;
+    this.initParticles();
+  }
+
+  initParticles() {
+    this.particles = [];
+    const count = window.innerWidth < 768 ? 40 : 90;
+    for (let i = 0; i < count; i++) {
+      this.particles.push({
+        x: Math.random() * this.canvas.width,
+        y: Math.random() * this.canvas.height,
+        size: Math.random() * 2.5 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.6,
+        speedY: (Math.random() - 0.5) * 0.6,
+        alpha: Math.random() * 0.7 + 0.3,
+        pulse: Math.random() * 0.02
+      });
+    }
+  }
+
+  getColor() {
+    switch (this.theme) {
+      case 'web': return '#ff0055';
+      case 'arcane': return '#9d4edd';
+      case 'lab': return '#00f0ff';
+      case 'legacy': return '#ffaa00';
+      case 'illusion': return '#00ff88';
+      default: return '#ffffff';
+    }
+  }
+
+  animate() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    const color = this.getColor();
+    this.particles.forEach(p => {
+      p.x += p.speedX;
+      p.y += p.speedY;
+      if (p.x < 0) p.x = this.canvas.width;
+      if (p.x > this.canvas.width) p.x = 0;
+      if (p.y < 0) p.y = this.canvas.height;
+      if (p.y > this.canvas.height) p.y = 0;
+
+      p.alpha += p.pulse;
+      if (p.alpha > 0.9 || p.alpha < 0.2) p.pulse = -p.pulse;
+
+      this.ctx.beginPath();
+      this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      this.ctx.fillStyle = color;
+      this.ctx.globalAlpha = Math.max(0.1, Math.min(1, p.alpha));
+      this.ctx.shadowBlur = 10;
+      this.ctx.shadowColor = color;
+      this.ctx.fill();
+    });
+    requestAnimationFrame(this.animate);
+  }
+}`,
+
+  'src/js/state.js': `class AppState {
+  constructor() {
+    this.visitedRealms = new Set();
+    this.totalRealms = 5;
+  }
+  markRealmVisited(id) { this.visitedRealms.add(id); }
+  areAllRealmsVisited() { return this.visitedRealms.size >= this.totalRealms; }
+  getVisitedCount() { return this.visitedRealms.size; }
+}
+export const appState = new AppState();`,
+
+  'src/js/components/AudioControls.js': `import { audioManager } from '../audio.js';
+
+export function renderAudioControls(containerEl) {
+  containerEl.innerHTML = \`
+    <button id="audio-toggle-btn" class="glass-btn px-4 py-2 flex items-center gap-2 text-xs">
+      <span id="audio-icon">🔊</span>
+      <span id="audio-label">SOUND ON</span>
+    </button>
+  \`;
+  const btn = document.getElementById('audio-toggle-btn');
+  const icon = document.getElementById('audio-icon');
+  const label = document.getElementById('audio-label');
+
+  btn.addEventListener('click', () => {
+    const isMuted = audioManager.toggleMute();
+    icon.textContent = isMuted ? '🔇' : '🔊';
+    label.textContent = isMuted ? 'MUTED' : 'SOUND ON';
+  });
+}`,
+
+  'src/js/components/Modal.js': `import { audioManager } from '../audio.js';
+
+export class Modal {
+  constructor() {
+    this.container = document.getElementById('modal-container');
+  }
+  open(contentHtml) {
+    audioManager.playClick();
+    this.container.innerHTML = \`
+      <div class="glass-panel relative w-full max-w-xl p-8 rounded-2xl neon-glow-arcane text-left">
+        <button id="modal-close-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl font-bold p-2">✕</button>
+        <div>\${contentHtml}</div>
+      </div>
+    \`;
+    this.container.classList.remove('hidden');
+    document.getElementById('modal-close-btn').addEventListener('click', () => this.close());
+    this.container.onclick = (e) => { if (e.target === this.container) this.close(); };
+  }
+  close() {
+    this.container.classList.add('hidden');
+    this.container.innerHTML = '';
+  }
+}
+export const globalModal = new Modal();`,
+
+  'src/js/scenes/OpeningScene.js': `import gsap from 'gsap';
+import { audioManager } from '../audio.js';
+
+export function renderOpeningScene(container, onEnterHub) {
+  container.innerHTML = \`
+    <div class="max-w-2xl mx-auto space-y-8 z-10">
+      <div id="opening-text-1" class="opacity-0 text-xl md:text-2xl text-gray-300">
+        "Every story exists in its own universe."
+      </div>
+      <div id="opening-text-2" class="opacity-0 text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
+        This one was made for you.
+      </div>
+      <div id="opening-btn-wrap" class="opacity-0 pt-4">
+        <button id="btn-enter-hub" class="glass-btn px-10 py-4 text-lg">ENTER THE MULTIVERSE</button>
+      </div>
+    </div>
+  \`;
+
+  gsap.timeline()
+    .to('#opening-text-1', { opacity: 1, duration: 1.5, delay: 0.5 })
+    .to('#opening-text-2', { opacity: 1, duration: 1.8 }, '+=0.5')
+    .to('#opening-btn-wrap', { opacity: 1, duration: 1 }, '+=0.2');
+
+  document.getElementById('btn-enter-hub').addEventListener('click', () => {
+    audioManager.playPortalHum();
+    gsap.to(container, { opacity: 0, scale: 1.2, duration: 1, onComplete: onEnterHub });
+  });
+}`,
+
+  'src/js/scenes/HubScene.js': `import { appState } from '../state.js';
+import { audioManager } from '../audio.js';
+
+export function renderHubScene(container, onSelectRealm, onSelectFinalPortal) {
+  const realms = [
+    { id: 'web-realm', title: 'Web Sanctuary', hero: 'Web Weaver', color: 'neon-glow-web', desc: 'Floating memory threads & nodes' },
+    { id: 'arcane-library', title: 'Arcane Sanctum', hero: 'Master Sorcerer', color: 'neon-glow-arcane', desc: 'Enchanted book of truth & apology letter' },
+    { id: 'innovation-lab', title: 'Innovation Core', hero: 'Futuristic Tech', color: 'neon-glow-lab', desc: 'Holographic HUD specs & promises' },
+    { id: 'legacy-hall', title: 'Hall of Legacy', hero: 'Timeless Guardian', color: 'neon-glow-legacy', desc: 'Chronological photo journal & soundtrack' },
+    { id: 'illusion-gallery', title: 'Illusion Gallery', hero: 'Trickster Realm', color: 'neon-glow-illusion', desc: 'Green mirror magic & hidden compliments' }
+  ];
+
+  const visitedCount = appState.getVisitedCount();
+  const allVisited = appState.areAllRealmsVisited();
+
+  container.innerHTML = \`
+    <div class="w-full max-w-6xl mx-auto flex flex-col h-full justify-between z-10">
+      <header class="text-center pt-4">
+        <h1 class="hud-title text-2xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-300">
+          MULTIVERSE NAVIGATION HUB
+        </h1>
+        <p class="text-xs text-gray-400 mt-2">Realms Visited: <span class="text-cyan-400 font-bold">\${visitedCount} / 5</span></p>
+      </header>
+      <div class="hub-grid grid grid-cols-1 md:grid-cols-5 gap-4 my-auto">
+        \${realms.map(r => \`
+          <div data-realm="\${r.id}" class="portal-card glass-panel p-5 relative flex flex-col justify-between h-64 border-t-2 \${r.color} \${appState.visitedRealms.has(r.id) ? 'visited' : ''}">
+            <div>
+              <span class="hud-title text-[10px] text-gray-400 uppercase">\${r.hero}</span>
+              <h3 class="text-lg font-bold text-white mt-1">\${r.title}</h3>
+              <p class="text-xs text-gray-300 mt-3">\${r.desc}</p>
+            </div>
+            <button class="glass-btn text-[10px] py-2 w-full mt-4">EXPLORE</button>
+          </div>
+        \`).join('')}
+      </div>
+      <footer class="pb-6 text-center">
+        <button id="btn-final-portal" class="glass-btn px-8 py-4 \${allVisited ? 'neon-glow-illusion scale-105' : 'opacity-50'}" \${!allVisited ? 'disabled' : ''}>
+          \${allVisited ? '✨ OPEN FINAL ETERNAL PORTAL ✨' : \`LOCK ACTIVE (\${visitedCount}/5 COMPLETE)\`}
+        </button>
+      </footer>
+    </div>
+  \`;
+
+  container.querySelectorAll('.portal-card').forEach(card => {
+    card.addEventListener('click', () => {
+      audioManager.playPortalHum();
+      onSelectRealm(card.getAttribute('data-realm'));
+    });
+  });
+
+  if (allVisited) {
+    document.getElementById('btn-final-portal').addEventListener('click', () => {
+      audioManager.playMagicSparkle();
+      onSelectFinalPortal();
+    });
+  }
+}`,
+
+  'src/js/scenes/WebRealm.js': `import { globalModal } from '../components/Modal.js';
+import { appState } from '../state.js';
+
+export function renderWebRealm(container, onBackToHub) {
+  appState.markRealmVisited('web-realm');
+  fetch('./data/memories.json').then(r => r.json()).then(memories => {
+    container.innerHTML = \`
+      <div class="w-full max-w-5xl mx-auto h-full flex flex-col justify-between z-10">
+        <header class="flex justify-between items-center border-b border-pink-500/30 pb-4">
+          <h2 class="text-2xl font-bold">The Web Sanctuary</h2>
+          <button id="web-back-btn" class="glass-btn text-xs py-2 px-4">← HUB</button>
+        </header>
+        <div class="relative flex-1 my-6 glass-panel overflow-hidden">
+          \${memories.map(mem => \`
+            <div data-id="\${mem.id}" class="memory-node absolute cursor-pointer" style="left: \${mem.coordinates.x}%; top: \${mem.coordinates.y}%;">
+              <div class="w-12 h-12 rounded-full bg-pink-600/30 border-2 border-pink-500 flex items-center justify-center">🕸️</div>
+            </div>
+          \`).join('')}
+        </div>
+      </div>
+    \`;
+    document.getElementById('web-back-btn').addEventListener('click', onBackToHub);
+    container.querySelectorAll('.memory-node').forEach(node => {
+      node.addEventListener('click', () => {
+        const mem = memories.find(m => m.id === node.getAttribute('data-id'));
+        if (mem) globalModal.open(\`<h3 class="text-xl font-bold">\${mem.title}</h3><p class="mt-2 text-sm text-gray-300">\${mem.description}</p>\`);
+      });
+    });
+  });
+}`,
+
+  'src/js/scenes/ArcaneLibrary.js': `import { appState } from '../state.js';
+
+export function renderArcaneLibrary(container, onBackToHub) {
+  appState.markRealmVisited('arcane-library');
+  fetch('./data/letter.json').then(r => r.json()).then(letter => {
+    container.innerHTML = \`
+      <div class="w-full max-w-4xl mx-auto h-full flex flex-col justify-between z-10">
+        <header class="flex justify-between items-center border-b border-purple-500/30 pb-4">
+          <h2 class="text-2xl font-bold">Arcane Sanctum</h2>
+          <button id="arcane-back-btn" class="glass-btn text-xs py-2 px-4">← HUB</button>
+        </header>
+        <div class="glass-panel p-8 my-auto border-purple-500/40 text-left space-y-4">
+          <h3 class="text-xl font-serif">\${letter.salutation}</h3>
+          \${letter.paragraphs.map(p => \`<p class="text-sm text-gray-300">\${p}</p>\`).join('')}
+          <div class="text-right text-purple-300 font-serif">\${letter.closing}<br/>\${letter.signature}</div>
+        </div>
+      </div>
+    \`;
+    document.getElementById('arcane-back-btn').addEventListener('click', onBackToHub);
+  });
+}`,
+
+  'src/js/scenes/InnovationLab.js': `import { appState } from '../state.js';
+
+export function renderInnovationLab(container, onBackToHub) {
+  appState.markRealmVisited('innovation-lab');
+  fetch('./data/promises.json').then(r => r.json()).then(promises => {
+    container.innerHTML = \`
+      <div class="w-full max-w-5xl mx-auto h-full flex flex-col justify-between z-10">
+        <header class="flex justify-between items-center border-b border-cyan-500/30 pb-4">
+          <h2 class="text-2xl font-bold">Innovation Core</h2>
+          <button id="lab-back-btn" class="glass-btn text-xs py-2 px-4">← HUB</button>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
+          \${promises.map(p => \`
+            <div class="glass-panel p-6 border-cyan-500/30 text-left">
+              <h3 class="text-lg font-bold text-cyan-200">\${p.title}</h3>
+              <p class="text-xs text-gray-300 mt-2">\${p.detail}</p>
+            </div>
+          \`).join('')}
+        </div>
+      </div>
+    \`;
+    document.getElementById('lab-back-btn').addEventListener('click', onBackToHub);
+  });
+}`,
+
+  'src/js/scenes/LegacyHall.js': `import { appState } from '../state.js';
+
+export function renderLegacyHall(container, onBackToHub) {
+  appState.markRealmVisited('legacy-hall');
+  fetch('./data/playlist.json').then(r => r.json()).then(playlist => {
+    container.innerHTML = \`
+      <div class="w-full max-w-4xl mx-auto h-full flex flex-col justify-between z-10">
+        <header class="flex justify-between items-center border-b border-amber-500/30 pb-4">
+          <h2 class="text-2xl font-bold">Hall of Legacy</h2>
+          <button id="legacy-back-btn" class="glass-btn text-xs py-2 px-4">← HUB</button>
+        </header>
+        <div class="glass-panel p-6 my-auto border-amber-500/30 divide-y divide-amber-500/20">
+          \${playlist.map(t => \`<div class="py-3 flex justify-between text-sm"><span>\${t.title}</span><span class="text-gray-400">\${t.duration}</span></div>\`).join('')}
+        </div>
+      </div>
+    \`;
+    document.getElementById('legacy-back-btn').addEventListener('click', onBackToHub);
+  });
+}`,
+
+  'src/js/scenes/IllusionGallery.js': `import { appState } from '../state.js';
+
+export function renderIllusionGallery(container, onBackToHub) {
+  appState.markRealmVisited('illusion-gallery');
+  fetch('./data/compliments.json').then(r => r.json()).then(compliments => {
+    container.innerHTML = \`
+      <div class="w-full max-w-5xl mx-auto h-full flex flex-col justify-between z-10">
+        <header class="flex justify-between items-center border-b border-emerald-500/30 pb-4">
+          <h2 class="text-2xl font-bold">Illusion Gallery</h2>
+          <button id="illusion-back-btn" class="glass-btn text-xs py-2 px-4">← HUB</button>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+          \${compliments.map(c => \`
+            <div class="mirror-card glass-panel p-6 h-40 flex items-center justify-center text-center border-emerald-500/30 relative">
+              <div>
+                <span class="text-2xl text-emerald-400">\${c.rune}</span>
+                <h4 class="hud-title text-xs mt-1">\${c.mirrorTitle}</h4>
+              </div>
+              <div class="secret-overlay absolute inset-0 p-6 flex items-center justify-center">
+                <p class="text-xs text-emerald-200">\${c.hiddenText}</p>
+              </div>
+            </div>
+          \`).join('')}
+        </div>
+      </div>
+    \`;
+    document.getElementById('illusion-back-btn').addEventListener('click', onBackToHub);
+  });
+}`,
+
+  'src/js/scenes/FinalPortal.js': `import confetti from 'canvas-confetti';
+
+export function renderFinalPortal(container, onRestart) {
+  container.innerHTML = \`
+    <div class="max-w-2xl mx-auto space-y-6 z-10 p-6">
+      <h2 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-emerald-400">
+        Our Bond Belongs To Every Universe
+      </h2>
+      <p class="text-sm text-gray-300 leading-relaxed">
+        Thank you for journeying through this memory box. No matter what dimensional shifts lie ahead, our bond remains eternal.
+      </p>
+      <button id="btn-restart" class="glass-btn px-8 py-3 text-xs">REVISIT THE MULTIVERSE</button>
+    </div>
+  \`;
+  try { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); } catch(e){}
+  document.getElementById('btn-restart').addEventListener('click', onRestart);
+}`,
+
+  'src/js/app.js': `import { ParticleEngine } from './particles.js';
+import { renderAudioControls } from './components/AudioControls.js';
+import { renderOpeningScene } from './scenes/OpeningScene.js';
+import { renderHubScene } from './scenes/HubScene.js';
+import { renderWebRealm } from './scenes/WebRealm.js';
+import { renderArcaneLibrary } from './scenes/ArcaneLibrary.js';
+import { renderInnovationLab } from './scenes/InnovationLab.js';
+import { renderLegacyHall } from './scenes/LegacyHall.js';
+import { renderIllusionGallery } from './scenes/IllusionGallery.js';
+import { renderFinalPortal } from './scenes/FinalPortal.js';
+
+class MemoryBoxApp {
+  constructor() {
+    this.particleEngine = new ParticleEngine('bg-canvas');
+    renderAudioControls(document.getElementById('audio-control'));
+    this.initRouter();
+  }
+
+  showScene(sceneId) {
+    document.querySelectorAll('.scene').forEach(s => {
+      s.classList.remove('active');
+      s.classList.add('hidden');
+    });
+    const target = document.getElementById(sceneId);
+    if (target) {
+      target.classList.remove('hidden');
+      target.classList.add('active');
+    }
+  }
+
+  initRouter() {
+    const openingEl = document.getElementById('scene-opening');
+    const hubEl = document.getElementById('scene-hub');
+
+    const goToHub = () => {
+      this.particleEngine.setTheme('default');
+      renderHubScene(hubEl, (realmId) => {
+        this.particleEngine.setTheme(realmId.split('-')[0]);
+        if (realmId === 'web-realm') renderWebRealm(document.getElementById('scene-web-realm'), goToHub);
+        if (realmId === 'arcane-library') renderArcaneLibrary(document.getElementById('scene-arcane-library'), goToHub);
+        if (realmId === 'innovation-lab') renderInnovationLab(document.getElementById('scene-innovation-lab'), goToHub);
+        if (realmId === 'legacy-hall') renderLegacyHall(document.getElementById('scene-legacy-hall'), goToHub);
+        if (realmId === 'illusion-gallery') renderIllusionGallery(document.getElementById('scene-illusion-gallery'), goToHub);
+        this.showScene(\`scene-\${realmId}\`);
+      }, () => {
+        renderFinalPortal(document.getElementById('scene-final-portal'), goToHub);
+        this.showScene('scene-final-portal');
+      });
+      this.showScene('scene-hub');
+    };
+
+    renderOpeningScene(openingEl, goToHub);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => { new MemoryBoxApp(); });`
+};
+
+Object.keys(files).forEach(filePath => {
+  const fullPath = path.join(__dirname, filePath);
+  fs.mkdirSync(path.dirname(fullPath), { recursive: true });
+  fs.writeFileSync(fullPath, files[filePath], 'utf8');
+  console.log(`Created: ${filePath}`);
+});
+
+console.log('\n✨ Project generated successfully! Run "npm install" then "npm run dev".');
