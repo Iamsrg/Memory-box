@@ -15,27 +15,46 @@
   </header>
 
   <main class="content-container ironman-theme">
-    <div class="arc-reactor" id="arcReactor" onclick="chargeReactor()">
-      <div class="arc-inner" id="reactorText">3000%</div>
-    </div>
-    <p style="font-size: 0.85rem; color: #8b949e; margin-bottom: 1.5rem;">(Click Arc Reactor to Boost Friendship Power)</p>
+    <p style="font-size: 0.9rem; color: #8b949e;">Tap the Arc Reactor to Charge Friendship Energy (+1000% per click)!</p>
 
-    <h2 style="color: var(--ironman-cyan); margin-bottom: 1rem;">FRIDAY Diagnostic Report</h2>
-    <div style="text-align: left; background: rgba(0,243,255,0.05); padding: 1.2rem; border-radius: 12px; border-left: 4px solid var(--ironman-cyan);">
-      <p><strong>Status:</strong> Best Friends Forever</p>
-      <p><strong>Inside Jokes Encrypted:</strong> 99,999+</p>
-      <p><strong>Genius/Bestie Quotient:</strong> Maxed Out</p>
-      <p><strong>Stark Memo:</strong> You are the Tony Stark to my chaotic life. Even when I mess up like a malfunctioning suit, I love you 3000!</p>
+    <div class="arc-reactor" id="arcReactor" onclick="chargeReactor()">
+      <div class="arc-inner" id="reactorText">0%</div>
+    </div>
+
+    <div class="jarvis-box" id="jarvisBox">
+      <p><strong>JARVIS Diagnostic:</strong> Arc Reactor Offline. Tap above to boost power level!</p>
     </div>
   </main>
 
   <script src="js/main.js"></script>
   <script>
-    let power = 3000;
+    let starkPower = 0;
+
     function chargeReactor() {
       audio.playIronMan();
-      power += 100;
-      document.getElementById('reactorText').innerText = power + "%";
+
+      if (starkPower < 3000) {
+        starkPower += 1000;
+        document.getElementById('reactorText').innerText = starkPower + "%";
+
+        if (starkPower === 1000) {
+          document.getElementById('jarvisBox').innerHTML = `<p><strong>JARVIS Status:</strong> Initializing core protocols... Coffee and jokes loaded!</p>`;
+        } else if (starkPower === 2000) {
+          document.getElementById('jarvisBox').innerHTML = `<p><strong>JARVIS Status:</strong> Repulsors charging... Forgiveness levels rising fast!</p>`;
+        } else if (starkPower === 3000) {
+          document.getElementById('arcReactor').classList.add('max-power');
+          document.getElementById('jarvisBox').style.borderColor = "var(--ironman-gold)";
+          document.getElementById('jarvisBox').innerHTML = `
+            <div style="color: var(--ironman-gold);">
+              <h3>🎉 MAXIMUM POWER LEVEL REACHED!</h3>
+              <p><strong>"Proof That We Have A Heart."</strong></p>
+              <p style="margin-top:0.5rem;">I love you 3000 bestie! System status: Unbreakable Friendship online!</p>
+            </div>
+          `;
+        }
+      } else {
+        alert("JARVIS: Core energy at absolute maximum (3000%). Love you 3000!");
+      }
     }
   </script>
 </body>

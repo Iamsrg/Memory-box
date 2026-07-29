@@ -8,34 +8,92 @@
 </head>
 <body>
 
+  <canvas id="spidey-canvas"></canvas>
+
   <header>
     <a href="index.html" class="back-btn">← Back to Multiverse Hub</a>
     <h1 class="title-glow" style="background: linear-gradient(135deg, #ff2a6d, #05d5e8); -webkit-background-clip: text;">SPIDEY MEMORY WEB</h1>
-    <p class="subtitle">Click on the Polaroids attached to the web!</p>
+    <p class="subtitle">Flip photos or fire the Hexagonal Web Shooter!</p>
   </header>
 
   <main class="content-container spidey-theme">
-    <h3 style="color: var(--spidey-red);">🚨 Spidey-Sense Alert!</h3>
-    <p style="margin: 0.5rem 0 1.5rem 0;">My Spidey-Sense told me I messed up... and my web shooters are out of fluid until I get your forgiveness!</p>
+    
+    <div style="margin-bottom: 1.5rem;">
+      <button class="action-btn" onclick="shootWebSorry()">Shoot Web Shooter 🕸️</button>
+    </div>
 
-    <div class="memory-grid">
-      <div class="polaroid" onclick="audio.playSpidey(); alert('Memory: That iconic late night chat where we couldn\'t stop laughing!')">
-        <div class="polaroid-img">📸</div>
-        <strong>Chaotic Duo</strong>
-        <p style="font-size: 0.75rem; color: #666; margin-top: 4px;">Always in sync!</p>
+    <div class="spidey-photo-grid">
+      
+      <!-- Photo 1 -->
+      <div class="flip-card" onclick="audio.playSpidey()">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&q=80" alt="Memory Photo 1" class="photo-img">
+            <strong style="font-size: 0.9rem; margin-top: 4px;">The Iconic Duo 📸</strong>
+            <small style="color:#777; font-size:0.7rem;">Tap to flip</small>
+          </div>
+          <div class="flip-back">
+            <p>"No matter how crazy life gets, you are my favorite person in the multiverse!"</p>
+          </div>
+        </div>
       </div>
 
-      <div class="polaroid" onclick="audio.playSpidey(); alert('Memory: All the times you supported me like a true superhero!')">
-        <div class="polaroid-img">🍕</div>
-        <strong>Snack & Rant Squad</strong>
-        <p style="font-size: 0.75rem; color: #666; margin-top: 4px;">Unstoppable!</p>
+      <!-- Photo 2 -->
+      <div class="flip-card" onclick="audio.playSpidey()">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Memory Photo 2" class="photo-img">
+            <strong style="font-size: 0.9rem; margin-top: 4px;">Late Night Talks 🍕</strong>
+            <small style="color:#777; font-size:0.7rem;">Tap to flip</small>
+          </div>
+          <div class="flip-back">
+            <p>"Thank you for always listening to my rants and keeping my secrets safe!"</p>
+          </div>
+        </div>
       </div>
 
-      <div class="polaroid" onclick="audio.playSpidey(); alert('Peter Parker Note: You are my absolute favorite person in the multiverse!')">
-        <div class="polaroid-img">🕸️</div>
-        <strong>Bestie Forever</strong>
-        <p style="font-size: 0.75rem; color: #666; margin-top: 4px;">Stuck together!</p>
+      <!-- Photo 3 -->
+      <div class="flip-card" onclick="audio.playSpidey()">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80" alt="Memory Photo 3" class="photo-img">
+            <strong style="font-size: 0.9rem; margin-top: 4px;">Partners In Crime 🚀</strong>
+            <small style="color:#777; font-size:0.7rem;">Tap to flip</small>
+          </div>
+          <div class="flip-back">
+            <p>"Life is 100x more fun when we are causing harmless chaos together!"</p>
+          </div>
+        </div>
       </div>
+
+      <!-- Photo 4 -->
+      <div class="flip-card" onclick="audio.playSpidey()">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=400&q=80" alt="Memory Photo 4" class="photo-img">
+            <strong style="font-size: 0.9rem; margin-top: 4px;">Spidey Apology 🕷️</strong>
+            <small style="color:#777; font-size:0.7rem;">Tap to flip</small>
+          </div>
+          <div class="flip-back">
+            <p>"My Spidey-Sense told me I goofed up! I'm super sorry bestie!"</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo 5 -->
+      <div class="flip-card" onclick="audio.playSpidey()">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=400&q=80" alt="Memory Photo 5" class="photo-img">
+            <strong style="font-size: 0.9rem; margin-top: 4px;">Stuck Together 🕸️</strong>
+            <small style="color:#777; font-size:0.7rem;">Tap to flip</small>
+          </div>
+          <div class="flip-back">
+            <p>"We are stuck together forever like web-fluid! Best friends for life."</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 

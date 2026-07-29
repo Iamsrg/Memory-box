@@ -11,37 +11,90 @@
   <header>
     <a href="index.html" class="back-btn">← Back to Multiverse Hub</a>
     <h1 class="title-glow" style="background: linear-gradient(135deg, #ffb800, #9d4edd); -webkit-background-clip: text;">TIME STONE SANCTUARY</h1>
-    <p class="subtitle">I checked 14,000,605 futures... and you're my best friend in all of them.</p>
+    <p class="subtitle">14,000,605 Futures... Best Friends in All of Them!</p>
   </header>
 
   <main class="content-container strange-theme">
-    <div class="time-slider-container">
-      <label for="timeRange" style="display:block; margin-bottom: 0.5rem; color: var(--strange-gold);">Rewind / Fast-Forward Timeline:</label>
-      <input type="range" id="timeRange" class="time-slider" min="1" max="3" value="2" oninput="updateTimeTimeline(this.value)">
+    
+    <!-- BARGAIN LOOP SECTION -->
+    <div style="font-size: 3.5rem; margin-bottom: 0.5rem; transition: transform 0.5s;" id="portalSymbol">🔮</div>
+    
+    <button class="action-btn" id="bargainBtn" style="background: linear-gradient(135deg, #ffb800, #ff8c00);" onclick="bargainLoop()">
+      "Dormammu, I've Come to Bargain!" ⏳
+    </button>
+
+    <div style="margin: 1.2rem 0; background: rgba(255, 184, 0, 0.08); padding: 1.2rem; border-radius: 12px; border: 1px solid var(--strange-gold);" id="bargainText">
+      <p>Click the Time Loop button above to bargain and erase bad vibes! (Limit: 6 Loops)</p>
     </div>
+
+    <hr style="border: 0; border-top: 1px solid rgba(255, 184, 0, 0.2); margin: 2rem 0;">
+
+    <!-- TIME STONE SLIDER SECTION -->
+    <h3 style="color: var(--strange-gold); margin-bottom: 0.5rem;">Eye of Agamotto Memory Timeline</h3>
+    <p style="font-size: 0.85rem; color: #aaa;">Drag the slider below to rewind and fast-forward time:</p>
+
+    <input type="range" id="timeRange" class="time-slider" min="1" max="4" value="2" oninput="updateTimeline(this.value)">
 
     <div class="time-card" id="timeCard">
       <h3 id="timeTitle" style="color: var(--strange-gold); margin-bottom: 0.5rem;">Present Moment</h3>
-      <p id="timeDesc">I made a mistake, but I wish I could use the Time Stone to rewind it! Since I can't, I promise to make every future timeline amazing.</p>
+      <p id="timeDesc">I made a mistake, but I wish I could use the Time Stone to rewind it! Since I can't, I promise to make every future timeline 100x better.</p>
     </div>
+
   </main>
 
   <script src="js/main.js"></script>
   <script>
-    function updateTimeTimeline(val) {
+    let loopCount = 0;
+    const maxLoops = 6;
+    const bargainMessages = [
+      "Dormammu, I've come to bargain! - Loop 1: Erasing the mistake from the sacred timeline...",
+      "Dormammu, I've come to bargain! - Loop 2: Rewinding the awkward moment and replacing it with boba...",
+      "Dormammu, I've come to bargain! - Loop 3: Crafting a universe filled with infinite snacks and peace...",
+      "Dormammu, I've come to bargain! - Loop 4: Banning all future arguments permanently...",
+      "Dormammu, I've come to bargain! - Loop 5: Almost there... Dormammu is growing tired of this loop!",
+      "Dormammu, I've come to bargain! - Loop 6: BARGAIN COMPLETE! Dormammu surrenders. All bad vibes are permanently banished forever!"
+    ];
+
+    function bargainLoop() {
+      audio.playStrange();
+
+      if (loopCount < maxLoops) {
+        loopCount++;
+        document.getElementById('portalSymbol').style.transform = `rotate(${loopCount * 120}deg)`;
+
+        const btn = document.getElementById('bargainBtn');
+        if (loopCount === maxLoops) {
+          btn.innerText = "Time Loop Maxed Out (6/6)! ✨";
+          btn.disabled = true;
+          btn.style.opacity = "0.7";
+        } else {
+          btn.innerText = `Time Loop #${loopCount} Started! ⏳`;
+        }
+
+        document.getElementById('bargainText').innerHTML = `
+          <h4 style="color: var(--strange-gold); margin-bottom:0.4rem;">Time Loop #${loopCount} of 6</h4>
+          <p>${bargainMessages[loopCount - 1]}</p>
+        `;
+      }
+    }
+
+    function updateTimeline(val) {
       audio.playStrange();
       const title = document.getElementById('timeTitle');
       const desc = document.getElementById('timeDesc');
 
       if (val == 1) {
-        title.innerText = "Timeline: The Beginning";
-        desc.innerText = "The day we became friends! The sacred timeline was forever changed for the better.";
+        title.innerText = "Timeline #1: The Day We Met";
+        desc.innerText = "The exact moment our paths crossed and the sacred friendship timeline was created!";
       } else if (val == 2) {
-        title.innerText = "Timeline: The Apology Node";
-        desc.innerText = "I made a blunder, but I wish I could use the Eye of Agamotto to fix it! I am super sorry, bestie!";
+        title.innerText = "Timeline #2: Present Apology Node";
+        desc.innerText = "I made a blunder, but my loyalty to you across every timeline remains 1000% intact!";
+      } else if (val == 3) {
+        title.innerText = "Timeline #3: Upcoming Hangout";
+        desc.innerText = "Scheduled timeline branch: Coffee, snacks, and laughing until our stomachs hurt!";
       } else {
-        title.innerText = "Timeline: Unlimited Future Adventures";
-        desc.innerText = "Upcoming plans: Coffee/Boba, endless banter, and zero silliness from my side!";
+        title.innerText = "Timeline #4: Future Unstoppable Duo";
+        desc.innerText = "In 14,000,605 possible futures, we remain best friends in every single one of them!";
       }
     }
   </script>

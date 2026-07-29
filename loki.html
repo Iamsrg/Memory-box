@@ -3,44 +3,124 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loki | Variant Mischief Vault</title>
+  <title>Loki | Multiversal Tree Branch Vault</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <header>
     <a href="index.html" class="back-btn">← Back to Multiverse Hub</a>
-    <h1 class="title-glow" style="background: linear-gradient(135deg, #00e676, #ffc107); -webkit-background-clip: text;">LOKI'S MISCHIEF VAULT</h1>
-    <p class="subtitle">Glorious Purpose & Redeemable Tokens</p>
+    <h1 class="title-glow" style="background: linear-gradient(135deg, #00e676, #ffc107); -webkit-background-clip: text;">MULTIVERSAL TREE VAULT</h1>
+    <p class="subtitle">Redeem tokens on alternate tree branches to prune the timeline!</p>
+    <button class="action-btn" style="background: var(--tva-orange); font-size:0.85rem; padding:0.5rem 1.2rem; margin-top:0.5rem;" onclick="resetTimelineTree()">Reset Timeline Tree 🔄</button>
   </header>
 
   <main class="content-container loki-theme">
-    <h3 style="color: var(--loki-green); margin-bottom: 0.5rem;">TVA Variant Report</h3>
-    <p>I proved to be a chaotic variant who made a mistake... but I promise to be a good variant now! Draw a redeemable token below:</p>
+    
+    <div class="tree-container">
+      <div class="tree-trunk"></div>
+      
+      <div class="tree-branch-wrapper">
 
-    <div class="token-card">
-      <div id="tokenDisplay" style="font-size: 1.3rem; font-weight: bold; color: var(--loki-gold); margin-bottom: 1rem;">
-        🎟️ Click Below to Reveal Your Token!
+        <!-- Left Branch 1 -->
+        <div class="tree-branch branch-left" id="node-boba">
+          <div style="font-size: 2rem;">🧋</div>
+          <strong style="color: var(--loki-gold); font-size: 1rem;">Branch #616</strong>
+          <p style="font-size: 0.8rem; margin: 0.3rem 0;">Free Boba / Coffee Treat</p>
+          <button class="action-btn" style="background: var(--loki-green); color:#000; font-size:0.8rem; padding:0.4rem 0.8rem;" onclick="pruneBranch('boba', 'Free Boba / Coffee')">Redeem & Prune ⚡</button>
+        </div>
+
+        <!-- Right Branch 2 -->
+        <div class="tree-branch branch-right" id="node-meal">
+          <div style="font-size: 2rem;">🍕</div>
+          <strong style="color: var(--loki-gold); font-size: 1rem;">Branch #838</strong>
+          <p style="font-size: 0.8rem; margin: 0.3rem 0;">Favorite Meal Treat Owed</p>
+          <button class="action-btn" style="background: var(--loki-green); color:#000; font-size:0.8rem; padding:0.4rem 0.8rem;" onclick="pruneBranch('meal', 'Favorite Meal Treat')">Redeem & Prune ⚡</button>
+        </div>
+
+        <!-- Left Branch 3 -->
+        <div class="tree-branch branch-left" id="node-movie">
+          <div style="font-size: 2rem;">🎬</div>
+          <strong style="color: var(--loki-gold); font-size: 1rem;">Branch #199999</strong>
+          <p style="font-size: 0.8rem; margin: 0.3rem 0;">Movie Night Choice</p>
+          <button class="action-btn" style="background: var(--loki-green); color:#000; font-size:0.8rem; padding:0.4rem 0.8rem;" onclick="pruneBranch('movie', 'Movie Night Choice')">Redeem & Prune ⚡</button>
+        </div>
+
+        <!-- Right Branch 4 -->
+        <div class="tree-branch branch-right" id="node-argument">
+          <div style="font-size: 2rem;">🤫</div>
+          <strong style="color: var(--loki-gold); font-size: 1rem;">Branch #1218</strong>
+          <p style="font-size: 0.8rem; margin: 0.3rem 0;">Win Any Argument Pass</p>
+          <button class="action-btn" style="background: var(--loki-green); color:#000; font-size:0.8rem; padding:0.4rem 0.8rem;" onclick="pruneBranch('argument', 'Win Any Argument Pass')">Redeem & Prune ⚡</button>
+        </div>
+
+        <!-- Left Branch 5 -->
+        <div class="tree-branch branch-left" id="node-icecream">
+          <div style="font-size: 2rem;">🍦</div>
+          <strong style="color: var(--loki-gold); font-size: 1rem;">Branch #777</strong>
+          <p style="font-size: 0.8rem; margin: 0.3rem 0;">Emergency Ice Cream Run</p>
+          <button class="action-btn" style="background: var(--loki-green); color:#000; font-size:0.8rem; padding:0.4rem 0.8rem;" onclick="pruneBranch('icecream', 'Emergency Ice Cream Run')">Redeem & Prune ⚡</button>
+        </div>
+
       </div>
-      <button class="action-btn" style="background: linear-gradient(135deg, var(--loki-green), #00b4d8);" onclick="drawToken()">Draw Redeemable Token 🎰</button>
     </div>
+
   </main>
 
   <script src="js/main.js"></script>
   <script>
-    const tokens = [
-      "🧋 Free Boba / Coffee Treat Token",
-      "🎬 Movie Night (You Pick The Movie) Token",
-      "🍟 Unlimited Snack Owed Token",
-      "🤫 Win Any 1 Argument Free Pass",
-      "🤗 100% Guaranteed Hug Token"
-    ];
+    const ids = ['boba', 'meal', 'movie', 'argument', 'icecream'];
 
-    function drawToken() {
-      audio.playLoki();
-      const randomToken = tokens[Math.floor(Math.random() * tokens.length)];
-      document.getElementById('tokenDisplay').innerText = randomToken;
+    function checkPrunedState() {
+      ids.forEach(id => {
+        const node = document.getElementById('node-' + id);
+        if (!node) return;
+
+        if (localStorage.getItem('pruned_' + id) === 'true') {
+          node.classList.add('pruned');
+          const btn = node.querySelector('button');
+          btn.disabled = true;
+          btn.innerText = "PRUNED ⚡";
+          btn.style.background = "#444";
+          btn.style.color = "#888";
+          
+          if (!node.querySelector('.prune-stamp')) {
+            const stamp = document.createElement('div');
+            stamp.className = 'prune-stamp';
+            stamp.innerText = 'PRUNED BY TVA';
+            node.appendChild(stamp);
+          }
+        } else {
+          node.classList.remove('pruned');
+          const btn = node.querySelector('button');
+          btn.disabled = false;
+          btn.innerText = "Redeem & Prune ⚡";
+          btn.style.background = "var(--loki-green)";
+          btn.style.color = "#000";
+          
+          const stamp = node.querySelector('.prune-stamp');
+          if (stamp) stamp.remove();
+        }
+      });
     }
+
+    function pruneBranch(id, title) {
+      audio.playLoki();
+      localStorage.setItem('pruned_' + id, 'true');
+      checkPrunedState();
+
+      sendNotification(`👑 TVA Alert: ${title} Token Redeemed!`, `Your best friend redeemed and pruned the '${title}' timeline branch on the website!`);
+      alert(`⚡ Branch Timeline Pruned! Token '${title}' redeemed & notification sent!`);
+    }
+
+    function resetTimelineTree() {
+      audio.playLoki();
+      ids.forEach(id => localStorage.removeItem('pruned_' + id));
+      checkPrunedState();
+      alert("🔄 Multiversal Timeline Tree unpruned and restored!");
+    }
+
+    checkPrunedState();
   </script>
 </body>
 </html>

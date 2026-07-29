@@ -1,0 +1,374 @@
+:root {
+  --bg-dark: #0a0c10;
+  --card-bg: rgba(22, 27, 34, 0.85);
+  --text-main: #f0f6fc;
+  --ironman-gold: #ffd700;
+  --ironman-red: #e50914;
+  --ironman-cyan: #00f3ff;
+  --spidey-red: #ff2a6d;
+  --spidey-blue: #05d5e8;
+  --strange-gold: #ffb800;
+  --strange-purple: #9d4edd;
+  --cap-blue: #1d3557;
+  --cap-red: #e63946;
+  --loki-green: #00e676;
+  --loki-gold: #ffc107;
+  --tva-orange: #ff5500;
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+header { text-align: center; padding: 2rem 1rem 1rem 1rem; max-width: 800px; }
+
+.title-glow {
+  font-size: 2.2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #00f3ff, #ff2a6d, #ffc107);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle { color: #8b949e; font-size: 0.95rem; }
+
+.back-btn {
+  display: inline-block;
+  margin: 1rem 0;
+  padding: 0.5rem 1.2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  width: 90%;
+  max-width: 1100px;
+  padding: 1.5rem 0;
+}
+
+.portal-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 1.8rem;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.portal-card:hover { transform: translateY(-8px); }
+.portal-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+
+.ironman-theme { border-color: var(--ironman-red); }
+.spidey-theme { border-color: var(--spidey-red); }
+.strange-theme { border-color: var(--strange-gold); }
+.cap-theme { border-color: var(--cap-red); }
+.loki-theme { border-color: var(--loki-green); }
+
+.content-container {
+  width: 90%;
+  max-width: 850px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+/* Iron Man Arc Reactor */
+.arc-reactor {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 8px solid var(--ironman-cyan);
+  margin: 1.5rem auto;
+  box-shadow: 0 0 25px var(--ironman-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.arc-reactor.max-power {
+  border-color: var(--ironman-gold);
+  box-shadow: 0 0 40px var(--ironman-gold), 0 0 80px var(--ironman-red);
+  animation: maxPulse 1s infinite alternate;
+}
+
+@keyframes maxPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+.arc-inner { font-weight: 800; font-size: 1.2rem; color: #fff; }
+
+.jarvis-box {
+  text-align: left;
+  background: rgba(0,243,255,0.05);
+  padding: 1.2rem;
+  border-radius: 12px;
+  border-left: 4px solid var(--ironman-cyan);
+  margin-top: 1.5rem;
+}
+
+/* Cap Accord Stamp Effect */
+.accord-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed var(--cap-red);
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin: 1.5rem 0;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.shield-stamp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(3) rotate(-15deg);
+  opacity: 0;
+  color: var(--cap-red);
+  border: 5px solid var(--cap-red);
+  padding: 0.5rem 1.5rem;
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  border-radius: 10px;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.shield-stamp.stamped {
+  opacity: 0.9;
+  transform: translate(-50%, -50%) scale(1) rotate(-15deg);
+}
+
+/* Spider-Man 3D Photo Flip Cards */
+.spidey-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.flip-card {
+  background-color: transparent;
+  height: 270px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-inner { transform: rotateY(180deg); }
+
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 14px;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.flip-front { background: #ffffff; color: #111; }
+.flip-back { background: var(--spidey-red); color: #fff; transform: rotateY(180deg); justify-content: center; }
+
+.photo-img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* Doctor Strange Slider */
+.time-slider {
+  width: 80%;
+  height: 8px;
+  accent-color: var(--strange-gold);
+  cursor: pointer;
+  margin: 1rem 0;
+}
+
+.time-card {
+  min-height: 120px;
+  padding: 1.2rem;
+  background: rgba(255, 184, 0, 0.08);
+  border: 1px solid var(--strange-gold);
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+/* Loki Multiversal Tree Branch Layout */
+.tree-container {
+  position: relative;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem 0;
+}
+
+.tree-trunk {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: linear-gradient(to bottom, var(--loki-green), var(--loki-gold), var(--tva-orange));
+  transform: translateX(-50%);
+  box-shadow: 0 0 20px var(--loki-green);
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.tree-branch-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.tree-branch {
+  width: 44%;
+  position: relative;
+  background: rgba(10, 25, 20, 0.95);
+  border: 2px solid var(--loki-green);
+  border-radius: 15px;
+  padding: 1.2rem;
+  box-shadow: 0 0 15px rgba(0, 230, 118, 0.2);
+  transition: all 0.4s ease;
+}
+
+.tree-branch.branch-left {
+  align-self: flex-start;
+  text-align: right;
+}
+
+.tree-branch.branch-left::after {
+  content: '';
+  position: absolute;
+  right: -26px;
+  top: 50%;
+  width: 26px;
+  height: 3px;
+  background: var(--loki-green);
+  box-shadow: 0 0 8px var(--loki-green);
+}
+
+.tree-branch.branch-right {
+  align-self: flex-end;
+  text-align: left;
+}
+
+.tree-branch.branch-right::after {
+  content: '';
+  position: absolute;
+  left: -26px;
+  top: 50%;
+  width: 26px;
+  height: 3px;
+  background: var(--loki-green);
+  box-shadow: 0 0 8px var(--loki-green);
+}
+
+.tree-branch.pruned {
+  border-color: var(--tva-orange);
+  background: rgba(25, 10, 10, 0.9);
+  box-shadow: 0 0 25px var(--tva-orange);
+}
+
+.tree-branch.pruned::after {
+  background: var(--tva-orange);
+  box-shadow: 0 0 8px var(--tva-orange);
+}
+
+.prune-stamp {
+  display: inline-block;
+  background: var(--tva-orange);
+  color: #fff;
+  font-weight: 900;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 650px) {
+  .tree-trunk { left: 15px; transform: none; }
+  .tree-branch { width: calc(100% - 45px); margin-left: 45px !important; text-align: left !important; }
+  .tree-branch.branch-left::after, .tree-branch.branch-right::after {
+    left: -30px; right: auto; width: 30px;
+  }
+}
+
+.action-btn {
+  background: linear-gradient(135deg, var(--spidey-red), #b7094c);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.8rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.action-btn:hover { transform: scale(1.05); }
+
+/* Web Shooter Canvas */
+#spidey-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+#confetti-canvas {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none; z-index: 99;
+}
