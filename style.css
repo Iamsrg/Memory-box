@@ -1,0 +1,290 @@
+:root {
+  --bg-dark: #0a0c10;
+  --card-bg: rgba(22, 27, 34, 0.85);
+  --text-main: #f0f6fc;
+  --ironman-gold: #ffd700;
+  --ironman-red: #e50914;
+  --ironman-cyan: #00f3ff;
+  --spidey-red: #ff2a6d;
+  --spidey-blue: #05d5e8;
+  --strange-gold: #ffb800;
+  --strange-purple: #9d4edd;
+  --cap-blue: #1d3557;
+  --cap-red: #e63946;
+  --loki-green: #00e676;
+  --loki-gold: #ffc107;
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 0.4s ease;
+}
+
+/* Header & Nav */
+header {
+  text-align: center;
+  padding: 2.5rem 1rem 1rem 1rem;
+  max-width: 800px;
+}
+
+.title-glow {
+  font-size: 2.2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #00f3ff, #ff2a6d, #ffc107);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+}
+
+.subtitle {
+  color: #8b949e;
+  font-size: 1rem;
+}
+
+.back-btn {
+  display: inline-block;
+  margin: 1.5rem 0;
+  padding: 0.6rem 1.2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Hub Grid */
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: 90%;
+  max-width: 1100px;
+  padding: 2rem 0;
+}
+
+.portal-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.portal-card:hover {
+  transform: translateY(-10px) scale(1.02);
+}
+
+.portal-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.portal-card:hover .portal-icon {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.portal-card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.portal-card p {
+  font-size: 0.85rem;
+  color: #a3b18a;
+  line-height: 1.4;
+}
+
+/* Superhero Theme Modifiers */
+.ironman-theme { border-color: var(--ironman-red); }
+.ironman-theme:hover { box-shadow: 0 0 25px var(--ironman-cyan); }
+
+.spidey-theme { border-color: var(--spidey-red); }
+.spidey-theme:hover { box-shadow: 0 0 25px var(--spidey-red); }
+
+.strange-theme { border-color: var(--strange-gold); }
+.strange-theme:hover { box-shadow: 0 0 25px var(--strange-gold); }
+
+.cap-theme { border-color: var(--cap-red); }
+.cap-theme:hover { box-shadow: 0 0 25px var(--cap-blue); }
+
+.loki-theme { border-color: var(--loki-green); }
+.loki-theme:hover { box-shadow: 0 0 25px var(--loki-green); }
+
+/* Main Content Box */
+.content-container {
+  width: 90%;
+  max-width: 800px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  text-align: center;
+}
+
+/* Iron Man Page Elements */
+.arc-reactor {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 8px solid var(--ironman-cyan);
+  margin: 1.5rem auto;
+  box-shadow: 0 0 30px var(--ironman-cyan), inset 0 0 20px var(--ironman-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: pulse 2s infinite alternate;
+}
+
+.arc-inner {
+  font-weight: bold;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.98); box-shadow: 0 0 15px var(--ironman-cyan); }
+  100% { transform: scale(1.05); box-shadow: 0 0 35px var(--ironman-cyan), inset 0 0 25px var(--ironman-cyan); }
+}
+
+/* Spider-Man Web Memories */
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.polaroid {
+  background: #fff;
+  color: #222;
+  padding: 1rem 1rem 1.5rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+  transform: rotate(-2deg);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.polaroid:nth-child(even) { transform: rotate(3deg); }
+.polaroid:hover { transform: scale(1.08) rotate(0deg); z-index: 10; }
+.polaroid-img {
+  width: 100%;
+  height: 140px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Doctor Strange Slider */
+.time-slider-container {
+  margin: 2rem 0;
+}
+
+.time-slider {
+  width: 80%;
+  height: 10px;
+  accent-color: var(--strange-gold);
+  cursor: pointer;
+}
+
+.time-card {
+  min-height: 150px;
+  padding: 1.5rem;
+  background: rgba(255, 184, 0, 0.1);
+  border: 1px solid var(--strange-gold);
+  border-radius: 12px;
+  margin-top: 1.5rem;
+}
+
+/* Cap Peace Accord */
+.accord-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed var(--cap-red);
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.action-btn {
+  background: linear-gradient(135deg, var(--cap-red), #b7094c);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.8rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4);
+  transition: transform 0.2s;
+}
+
+.action-btn:hover { transform: scale(1.05); }
+
+/* Loki Token Machine */
+.token-card {
+  background: rgba(0, 230, 118, 0.1);
+  border: 1px solid var(--loki-green);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Canvas Confetti */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99;
+}
+
+@media (max-width: 600px) {
+  .title-glow { font-size: 1.7rem; }
+  .portal-grid { grid-template-columns: 1fr; }
+  .content-container { padding: 1.2rem; }
+}

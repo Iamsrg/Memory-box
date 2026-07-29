@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Captain America | S.H.I.E.L.D. Peace Accords</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <header>
+    <a href="index.html" class="back-btn">← Back to Multiverse Hub</a>
+    <h1 class="title-glow" style="background: linear-gradient(135deg, #e63946, #1d3557); -webkit-background-clip: text;">THE PEACE ACCORDS</h1>
+    <p class="subtitle">"I can apologize for this all day."</p>
+  </header>
+
+  <main class="content-container cap-theme">
+    <div style="font-size: 4rem; margin-bottom: 0.5rem;">🛡️</div>
+    
+    <div class="accord-box">
+      <h3 style="color: var(--cap-red); margin-bottom: 0.8rem;">S.H.I.E.L.D. Official Friendship Protocol</h3>
+      <p style="font-size: 0.9rem; line-height: 1.6;">
+        <strong>Article 1:</strong> The undersigned admits to making an embarrassing blunder.<br>
+        <strong>Article 2:</strong> Bestie retains full authority to request snacks, bobas, or favorite meals as reparations.<br>
+        <strong>Article 3:</strong> Friendship is sworn to remain unbreakable forever.
+      </p>
+    </div>
+
+    <button class="action-btn" onclick="signAccord()">Sign Peace Accord ✍️</button>
+    <p id="accordStatus" style="margin-top: 1rem; color: #00e676; font-weight: bold;"></p>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    function signAccord() {
+      audio.playCap();
+      triggerConfetti();
+      document.getElementById('accordStatus').innerText = "✅ Peace Accord Ratified! Truce Established & Hugs Dispatched!";
+    }
+  </script>
+</body>
+</html>

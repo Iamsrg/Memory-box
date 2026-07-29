@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Strange | Sacred Timeline</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="back-btn">← Back to Multiverse Hub</a>
+    <h1 class="title-glow" style="background: linear-gradient(135deg, #ffb800, #9d4edd); -webkit-background-clip: text;">TIME STONE SANCTUARY</h1>
+    <p class="subtitle">I checked 14,000,605 futures... and you're my best friend in all of them.</p>
+  </header>
+
+  <main class="content-container strange-theme">
+    <div class="time-slider-container">
+      <label for="timeRange" style="display:block; margin-bottom: 0.5rem; color: var(--strange-gold);">Rewind / Fast-Forward Timeline:</label>
+      <input type="range" id="timeRange" class="time-slider" min="1" max="3" value="2" oninput="updateTimeTimeline(this.value)">
+    </div>
+
+    <div class="time-card" id="timeCard">
+      <h3 id="timeTitle" style="color: var(--strange-gold); margin-bottom: 0.5rem;">Present Moment</h3>
+      <p id="timeDesc">I made a mistake, but I wish I could use the Time Stone to rewind it! Since I can't, I promise to make every future timeline amazing.</p>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    function updateTimeTimeline(val) {
+      audio.playStrange();
+      const title = document.getElementById('timeTitle');
+      const desc = document.getElementById('timeDesc');
+
+      if (val == 1) {
+        title.innerText = "Timeline: The Beginning";
+        desc.innerText = "The day we became friends! The sacred timeline was forever changed for the better.";
+      } else if (val == 2) {
+        title.innerText = "Timeline: The Apology Node";
+        desc.innerText = "I made a blunder, but I wish I could use the Eye of Agamotto to fix it! I am super sorry, bestie!";
+      } else {
+        title.innerText = "Timeline: Unlimited Future Adventures";
+        desc.innerText = "Upcoming plans: Coffee/Boba, endless banter, and zero silliness from my side!";
+      }
+    }
+  </script>
+</body>
+</html>

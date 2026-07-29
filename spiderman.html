@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spider-Man | Friendly Neighborhood Memories</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="back-btn">← Back to Multiverse Hub</a>
+    <h1 class="title-glow" style="background: linear-gradient(135deg, #ff2a6d, #05d5e8); -webkit-background-clip: text;">SPIDEY MEMORY WEB</h1>
+    <p class="subtitle">Click on the Polaroids attached to the web!</p>
+  </header>
+
+  <main class="content-container spidey-theme">
+    <h3 style="color: var(--spidey-red);">🚨 Spidey-Sense Alert!</h3>
+    <p style="margin: 0.5rem 0 1.5rem 0;">My Spidey-Sense told me I messed up... and my web shooters are out of fluid until I get your forgiveness!</p>
+
+    <div class="memory-grid">
+      <div class="polaroid" onclick="audio.playSpidey(); alert('Memory: That iconic late night chat where we couldn\'t stop laughing!')">
+        <div class="polaroid-img">📸</div>
+        <strong>Chaotic Duo</strong>
+        <p style="font-size: 0.75rem; color: #666; margin-top: 4px;">Always in sync!</p>
+      </div>
+
+      <div class="polaroid" onclick="audio.playSpidey(); alert('Memory: All the times you supported me like a true superhero!')">
+        <div class="polaroid-img">🍕</div>
+        <strong>Snack & Rant Squad</strong>
+        <p style="font-size: 0.75rem; color: #666; margin-top: 4px;">Unstoppable!</p>
+      </div>
+
+      <div class="polaroid" onclick="audio.playSpidey(); alert('Peter Parker Note: You are my absolute favorite person in the multiverse!')">
+        <div class="polaroid-img">🕸️</div>
+        <strong>Bestie Forever</strong>
+        <p style="font-size: 0.75rem; color: #666; margin-top: 4px;">Stuck together!</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

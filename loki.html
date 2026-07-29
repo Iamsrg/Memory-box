@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loki | Variant Mischief Vault</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="back-btn">← Back to Multiverse Hub</a>
+    <h1 class="title-glow" style="background: linear-gradient(135deg, #00e676, #ffc107); -webkit-background-clip: text;">LOKI'S MISCHIEF VAULT</h1>
+    <p class="subtitle">Glorious Purpose & Redeemable Tokens</p>
+  </header>
+
+  <main class="content-container loki-theme">
+    <h3 style="color: var(--loki-green); margin-bottom: 0.5rem;">TVA Variant Report</h3>
+    <p>I proved to be a chaotic variant who made a mistake... but I promise to be a good variant now! Draw a redeemable token below:</p>
+
+    <div class="token-card">
+      <div id="tokenDisplay" style="font-size: 1.3rem; font-weight: bold; color: var(--loki-gold); margin-bottom: 1rem;">
+        🎟️ Click Below to Reveal Your Token!
+      </div>
+      <button class="action-btn" style="background: linear-gradient(135deg, var(--loki-green), #00b4d8);" onclick="drawToken()">Draw Redeemable Token 🎰</button>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    const tokens = [
+      "🧋 Free Boba / Coffee Treat Token",
+      "🎬 Movie Night (You Pick The Movie) Token",
+      "🍟 Unlimited Snack Owed Token",
+      "🤫 Win Any 1 Argument Free Pass",
+      "🤗 100% Guaranteed Hug Token"
+    ];
+
+    function drawToken() {
+      audio.playLoki();
+      const randomToken = tokens[Math.floor(Math.random() * tokens.length)];
+      document.getElementById('tokenDisplay').innerText = randomToken;
+    }
+  </script>
+</body>
+</html>
