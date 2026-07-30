@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>An Avengers Level Threat...</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="intro-body">
+
+  <!-- Cosmic Stars Canvas -->
+  <canvas id="starfield-canvas"></canvas>
+
+  <div class="intro-container">
+    
+    <!-- Text Step 1: Threat Warning -->
+    <h1 class="intro-text threat-text" id="introThreat">
+      ⚡ WE HAVE AN AVENGERS LEVEL THREAT ⚡
+    </h1>
+
+    <!-- Text Step 2: Apology Context -->
+    <p class="intro-text message-text" id="introMessage">
+      We have hurt our best friend... and now we need all the help we can get from Earth's mightiest heroes.
+    </p>
+
+    <!-- Step 3: Get Help Button -->
+    <button class="get-help-btn" id="getHelpBtn" onclick="triggerGetHelpSequence()">
+      GET HELP 🚀
+    </button>
+
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Initialize stars particle background & text animation timeline on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      initStarfield();
+      runIntroTimeline();
+    });
+  </script>
+</body>
+</html>
