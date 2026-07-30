@@ -3,48 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Sacred Friendship Multiverse</title>
+  <title>An Avengers Level Threat...</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="intro-body">
 
-  <header>
-    <h1 class="title-glow">MULTIVERSE MEMORY VAULT</h1>
-    <p class="subtitle">Welcome Bestie! Select a Portal to explore our legendary timeline 🚀</p>
-  </header>
+  <!-- Cosmic Stars Canvas -->
+  <canvas id="starfield-canvas"></canvas>
 
-  <main class="portal-grid">
-    <a href="ironman.html" class="portal-card ironman-theme" onclick="audio.playIronMan()">
-      <div class="portal-icon">🦾</div>
-      <h2>Iron Man Node</h2>
-      <p>"Proof That We Have A Heart" & Arc Reactor Power</p>
-    </a>
+  <div class="intro-container">
+    
+    <!-- Text Step 1: Threat Warning -->
+    <h1 class="intro-text threat-text" id="introThreat">
+      ⚡ WE HAVE AN AVENGERS LEVEL THREAT ⚡
+    </h1>
 
-    <a href="spiderman.html" class="portal-card spidey-theme" onclick="audio.playSpidey()">
-      <div class="portal-icon">🕷️</div>
-      <h2>Spider-Man Web</h2>
-      <p>Hexagonal Web Shooter & Photo Memory Flip Cards</p>
-    </a>
+    <!-- Text Step 2: Apology Context -->
+    <p class="intro-text message-text" id="introMessage">
+      We have hurt our best friend... and now we need all the help we can get from Earth's mightiest heroes.
+    </p>
 
-    <a href="doctorstrange.html" class="portal-card strange-theme" onclick="audio.playStrange()">
-      <div class="portal-icon">🔮</div>
-      <h2>Doctor Strange Portal</h2>
-      <p>14,000,605 Futures... Time Loop & Stone Slider</p>
-    </a>
+    <!-- Step 3: Get Help Button -->
+    <button class="get-help-btn" id="getHelpBtn" onclick="triggerGetHelpSequence()">
+      GET HELP 🚀
+    </button>
 
-    <a href="captainamerica.html" class="portal-card cap-theme" onclick="audio.playCap()">
-      <div class="portal-icon">🛡️</div>
-      <h2>Cap's Peace Accords</h2>
-      <p>Strategic Truce Brief & Official Apology Accord</p>
-    </a>
-
-    <a href="loki.html" class="portal-card loki-theme" onclick="audio.playLoki()">
-      <div class="portal-icon">👑</div>
-      <h2>Loki's Multiverse Tree</h2>
-      <p>Yggdrasil Timeline Branches & Redeemable Tokens</p>
-    </a>
-  </main>
+  </div>
 
   <script src="js/main.js"></script>
+  <script>
+    // Initialize stars particle background & text animation timeline on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      initStarfield();
+      runIntroTimeline();
+    });
+  </script>
 </body>
 </html>

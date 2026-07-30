@@ -1,9 +1,58 @@
 // ==========================================
-// 🔑 NOTIFICATION SETUP (PUT YOUR KEY HERE)
+// ✨ GLOBAL PAGE TRANSITIONS
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+  // Make body visible (fixes blank screen issue)
+  document.body.classList.add("page-loaded");
+
+  // Intercept page links for smooth fade-out navigation
+  document.querySelectorAll("a, .back-btn, .portal-card").forEach(link => {
+    link.addEventListener("click", (e) => {
+      const href = link.getAttribute("href");
+      if (href && !href.startsWith("#") && !href.startsWith("javascript")) {
+        // Skip if handled by navigateWithSound to avoid double execution
+        if (link.getAttribute("onclick") && link.getAttribute("onclick").includes("navigateWithSound")) {
+          return;
+        }
+        e.preventDefault();
+        document.body.classList.remove("page-loaded");
+        document.body.classList.add("page-exiting");
+        setTimeout(() => {
+          window.location.href = href;
+        }, 400);
+      }
+    });
+  });
+});
+
+// Navigation controller with sound and fade transition
+function navigateWithSound(event, targetUrl, audioPath, fallbackSynthFunc) {
+  event.preventDefault();
+
+  if (audioPath) {
+    const customAudio = new Audio(audioPath);
+    customAudio.volume = 0.8;
+    customAudio.play().catch(() => {
+      if (typeof fallbackSynthFunc === 'function') fallbackSynthFunc();
+    });
+  } else if (typeof fallbackSynthFunc === 'function') {
+    fallbackSynthFunc();
+  }
+
+  // Trigger smooth fade out
+  document.body.classList.remove("page-loaded");
+  document.body.classList.add("page-exiting");
+
+  setTimeout(() => {
+    window.location.href = targetUrl;
+  }, 600);
+}
+
+// ==========================================
+// 🔑 NOTIFICATION SETUP
 // ==========================================
 const WEB3FORMS_ACCESS_KEY = "YOUR_ACCESS_KEY_HERE"; // Get free at web3forms.com
 
-// --- EMAIL NOTIFICATION SENDER ---
 async function sendNotification(subject, message) {
   if (WEB3FORMS_ACCESS_KEY === "YOUR_ACCESS_KEY_HERE") {
     console.log("Notification trigger simulated:", subject, message);
@@ -26,7 +75,9 @@ async function sendNotification(subject, message) {
   }
 }
 
-// --- AUDIO SYNTHESIZER ---
+// ==========================================
+// 🔊 AUDIO SYNTHESIZER
+// ==========================================
 class SuperheroAudio {
   constructor() { this.ctx = null; }
   init() {
@@ -99,11 +150,38 @@ class SuperheroAudio {
     osc.connect(gain); gain.connect(this.ctx.destination);
     osc.start(); osc.stop(this.ctx.currentTime + 0.25);
   }
+
+  playThor() {
+    this.init();
+    const osc1 = this.ctx.createOscillator();
+    const osc2 = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc1.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(80, this.ctx.currentTime);
+    osc1.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.6);
+
+    osc2.type = 'square';
+    osc2.frequency.setValueAtTime(1200, this.ctx.currentTime);
+    osc2.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.2);
+
+    gain.gain.setValueAtTime(0.35, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.6);
+
+    osc1.connect(gain); osc2.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc1.start(); osc2.start();
+    osc1.stop(this.ctx.currentTime + 0.6);
+    osc2.stop(this.ctx.currentTime + 0.6);
+  }
 }
 
 const audio = new SuperheroAudio();
 
-// --- SPIDER-MAN WEB SHOOTER (BLACK SCREEN HOLD + SMOOTH FADE BACK) ---
+// ==========================================
+// 🕸️ SPIDER-MAN WEB SHOOTER
+// ==========================================
 function shootWebSorry() {
   audio.playSpidey();
   let canvas = document.getElementById('spidey-canvas');
@@ -123,11 +201,9 @@ function shootWebSorry() {
   function drawHexWeb() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 1. Draw solid dark backdrop
     ctx.fillStyle = `rgba(10, 12, 16, ${alpha})`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 2. Draw Hexagonal Web Lines
     ctx.strokeStyle = `rgba(255, 255, 255, ${0.9 * alpha})`;
     ctx.shadowColor = "#00f3ff";
     ctx.shadowBlur = 12;
@@ -168,7 +244,6 @@ function shootWebSorry() {
       }
     }
 
-    // 3. Display Glowing Text
     if (progress >= 1) {
       ctx.shadowColor = "#ff2a6d";
       ctx.shadowBlur = 30;
@@ -178,11 +253,9 @@ function shootWebSorry() {
       ctx.textBaseline = "middle";
       ctx.fillText("🕸️ I AM SORRY! 🕷️", cx, cy);
 
-      // STAY ON BLACK SCREEN FOR 1 SECOND, THEN SMOOTHLY FADE BACK
       setTimeout(() => {
         let fadeInterval = setInterval(() => {
           alpha -= 0.05;
-          
           if (alpha <= 0) {
             clearInterval(fadeInterval);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -244,4 +317,116 @@ function triggerConfetti() {
     if (pieces.some(p => p.y < canvas.height)) requestAnimationFrame(animate);
   }
   animate();
+}
+
+// ==========================================
+// 🌠 COSMIC STARFIELD & INTRO TIMELINE
+// ==========================================
+let stars = [];
+let starSpeed = 0.3;
+
+function initStarfield() {
+  const canvas = document.getElementById('starfield-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  stars = [];
+  for (let i = 0; i < 200; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.8 + 0.3,
+      alpha: Math.random(),
+      speed: Math.random() * 0.5 + 0.1,
+      color: ['#ffffff', '#00f3ff', '#ffd700', '#ff2a6d'][Math.floor(Math.random() * 4)]
+    });
+  }
+
+  function render() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    stars.forEach(s => {
+      s.y -= s.speed * starSpeed;
+      if (s.y < 0) s.y = canvas.height;
+
+      s.alpha += (Math.random() - 0.5) * 0.05;
+      if (s.alpha < 0.2) s.alpha = 0.2;
+      if (s.alpha > 1) s.alpha = 1;
+
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+      ctx.fillStyle = s.color;
+      ctx.globalAlpha = s.alpha;
+      ctx.fill();
+    });
+
+    requestAnimationFrame(render);
+  }
+  render();
+}
+
+function runIntroTimeline() {
+  setTimeout(() => {
+    const threat = document.getElementById('introThreat');
+    if (threat) threat.classList.add('visible');
+  }, 1500);
+
+  setTimeout(() => {
+    const msg = document.getElementById('introMessage');
+    if (msg) msg.classList.add('visible');
+  }, 4200);
+
+  setTimeout(() => {
+    const btn = document.getElementById('getHelpBtn');
+    if (btn) btn.classList.add('visible');
+  }, 7000);
+}
+
+function triggerGetHelpSequence() {
+  audio.playCap();
+  starSpeed = 18;
+
+  const container = document.querySelector('.intro-container');
+  if (container) {
+    container.style.transition = "opacity 0.8s ease, transform 0.8s ease";
+    container.style.opacity = "0";
+    container.style.transform = "scale(1.2)";
+  }
+
+  setTimeout(() => {
+    window.location.href = "hub.html";
+  }, 900);
+}
+
+// ==========================================
+// 🔊 HERO THEME PLAYER
+// ==========================================
+let currentHeroAudio = null;
+
+function initHeroTheme(audioPath, fallbackSynthFunc) {
+  window.addEventListener('DOMContentLoaded', () => {
+    if (audioPath) {
+      currentHeroAudio = new Audio(audioPath);
+      currentHeroAudio.volume = 0.5;
+      currentHeroAudio.loop = true;
+
+      currentHeroAudio.play().catch(() => {
+        const playOnClick = () => {
+          if (currentHeroAudio) currentHeroAudio.play();
+          window.removeEventListener('click', playOnClick);
+        };
+        window.addEventListener('click', playOnClick);
+      });
+    } else if (typeof fallbackSynthFunc === 'function') {
+      fallbackSynthFunc();
+    }
+  });
 }

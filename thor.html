@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thor | God of Thunder Vault</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Fullscreen Lightning Shockwave Flash Overlay -->
+  <div id="lightning-flash"></div>
+
+  <header>
+    <a href="hub.html" class="back-btn">← Back to Multiverse Hub</a>
+    <h1 class="title-glow" style="background: linear-gradient(135deg, #00f3ff, #ffd700); -webkit-background-clip: text;">THOR ARCHIVE</h1>
+    <p class="subtitle">"I Should Have Sent This On Time." ⚡🔨</p>
+  </header>
+
+  <main class="content-container thor-theme">
+    
+    <div style="font-size: 4rem; margin-bottom: 0.5rem;" id="thorIcon">🔨</div>
+
+    <!-- Thor Quote -->
+    <blockquote class="thor-quote">
+      "Just like Thor should've gone for Thanos's head, I should've sent this on time."
+    </blockquote>
+
+    <!-- Action Button -->
+    <div style="margin: 2rem 0;">
+      <button class="action-btn thor-btn" id="summonBtn" onclick="summonStormbreaker()">
+        Summon Stormbreaker ⚡
+      </button>
+    </div>
+
+    <!-- Message Box Overlay (Initially Hidden) -->
+    <div class="thor-message-box" id="thorMessageBox">
+      <div class="message-header">
+        ⚡ MESSAGE FROM BIFROST ⚡
+      </div>
+      <div class="message-content">
+        <!-- EDIT YOUR PERSONAL MESSAGE HERE -->
+        <p>Hey bestie! I know I missed the perfect timing, but like Thor arriving in Wakanda with Stormbreaker, I'm turning the tide now! You mean the world to me and I hope this multiverse vault brings a huge smile to your face! ⚡❤️</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    initHeroTheme('audio/thor.mp3', () => audio.playThor());
+
+    function summonStormbreaker() {
+      audio.playThor();
+
+      // Trigger lightning shockwave effect
+      const flash = document.getElementById('lightning-flash');
+      flash.classList.add('flash-active');
+      
+      setTimeout(() => {
+        flash.classList.remove('flash-active');
+      }, 400);
+
+      // Reveal Message Box
+      const msgBox = document.getElementById('thorMessageBox');
+      msgBox.classList.add('visible');
+
+      // Update button state
+      const btn = document.getElementById('summonBtn');
+      btn.innerText = "STORMBREAKER SUMMONED ⚡";
+      btn.disabled = true;
+      btn.style.opacity = "0.7";
+    }
+  </script>
+</body>
+</html>

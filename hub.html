@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Sacred Friendship Multiverse Hub</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <h1 class="title-glow">MULTIVERSE MEMORY VAULT</h1>
+    <p class="subtitle">Welcome Bestie! Select a Portal to explore our legendary timeline 🚀</p>
+  </header>
+
+  <main class="portal-grid">
+    
+    <!-- 1. Iron Man -->
+    <a href="ironman.html" class="portal-card ironman-theme" 
+       onclick="navigateWithSound(event, 'ironman.html', 'music/ironman.mp3', () => audio.playIronMan())">
+      <div class="portal-icon">🦾</div>
+      <h2>Iron Man Node</h2>
+      <p>"Proof That We Have A Heart" & Arc Reactor Power</p>
+    </a>
+
+    <!-- 2. Spider-Man -->
+    <a href="spiderman.html" class="portal-card spidey-theme" 
+       onclick="navigateWithSound(event, 'spiderman.html', 'music/spiderman.mp3', () => audio.playSpidey())">
+      <div class="portal-icon">🕷️</div>
+      <h2>Spider-Man Web</h2>
+      <p>Hexagonal Web Shooter & Photo Memory Flip Cards</p>
+    </a>
+
+    <!-- 3. Doctor Strange -->
+    <a href="doctorstrange.html" class="portal-card strange-theme" 
+       onclick="navigateWithSound(event, 'doctorstrange.html', 'music/doctorstrange.mp3', () => audio.playStrange())">
+      <div class="portal-icon">🔮</div>
+      <h2>Doctor Strange Portal</h2>
+      <p>14,000,605 Futures... Time Loop & Stone Slider</p>
+    </a>
+
+    <!-- 4. Thor (Placed directly below Doctor Strange!) -->
+    <a href="thor.html" class="portal-card thor-theme" 
+       onclick="navigateWithSound(event, 'thor.html', 'music/thor.mp3', () => audio.playThor())">
+      <div class="portal-icon">⚡</div>
+      <h2>Thor's Lightning Realm</h2>
+      <p>Asgardian Message</p>
+    </a>
+
+    <!-- 5. Captain America -->
+    <a href="captainamerica.html" class="portal-card cap-theme" 
+       onclick="navigateWithSound(event, 'captainamerica.html', 'music/captainamerica.mp3', () => audio.playCap())">
+      <div class="portal-icon">🛡️</div>
+      <h2>Cap's Peace Accords</h2>
+      <p>Strategic Truce Brief & Official Apology Accord</p>
+    </a>
+
+    <!-- 6. Loki -->
+    <a href="loki.html" class="portal-card loki-theme" 
+       onclick="navigateWithSound(event, 'loki.html', 'music/loki.mp3', () => audio.playLoki())">
+      <div class="portal-icon">👑</div>
+      <h2>Loki's Multiverse Tree</h2>
+      <p>Yggdrasil Timeline Branches & Redeemable Tokens</p>
+    </a>
+
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
