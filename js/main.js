@@ -154,10 +154,10 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================
 // 🔑 NOTIFICATION SETUP
 // ==========================================
-const WEB3FORMS_ACCESS_KEY = "YOUR_ACCESS_KEY_HERE";
+const WEB3FORMS_ACCESS_KEY = "4c3aa7be-3f4d-4a70-83b5-14a58aff02c8";
 
 async function sendNotification(subject, message) {
-  if (WEB3FORMS_ACCESS_KEY === "YOUR_ACCESS_KEY_HERE") {
+  if (WEB3FORMS_ACCESS_KEY === "4c3aa7be-3f4d-4a70-83b5-14a58aff02c8") {
     console.log("Notification trigger simulated:", subject, message);
     return;
   }
