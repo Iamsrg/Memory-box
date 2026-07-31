@@ -1,17 +1,128 @@
 // ==========================================
-// ✨ GLOBAL PAGE TRANSITIONS
+// 🔊 GLOBAL AUDIO CONTROLLER (SEAMLESS CROSS-PAGE AUDIO)
 // ==========================================
+class GlobalAudioController {
+  constructor() {
+    this.audio = null;
+    this.currentSrc = null;
+  }
+
+  playTrack(src, loop = false, startOffset = 0) {
+    if (!src) return;
+
+    if (this.audio && this.currentSrc === src && !this.audio.paused) {
+      return;
+    }
+
+    this.stopTrack(false);
+
+    this.audio = new Audio(src);
+    this.currentSrc = src;
+    this.audio.loop = loop;
+    this.audio.volume = 0.8;
+
+    if (startOffset > 0) {
+      this.audio.currentTime = startOffset;
+    }
+
+    sessionStorage.setItem('marvel_audio_src', src);
+    sessionStorage.setItem('marvel_audio_time', this.audio.currentTime.toString());
+    sessionStorage.setItem('marvel_audio_timestamp', Date.now().toString());
+    sessionStorage.setItem('marvel_audio_loop', loop ? 'true' : 'false');
+
+    const playPromise = this.audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        const handleUserGesture = () => {
+          if (this.audio) this.audio.play().catch(() => {});
+          window.removeEventListener('click', handleUserGesture);
+          window.removeEventListener('touchstart', handleUserGesture);
+        };
+        window.addEventListener('click', handleUserGesture);
+        window.addEventListener('touchstart', handleUserGesture);
+      });
+    }
+
+    this.audio.ontimeupdate = () => {
+      if (this.audio) {
+        sessionStorage.setItem('marvel_audio_time', this.audio.currentTime.toString());
+        sessionStorage.setItem('marvel_audio_timestamp', Date.now().toString());
+      }
+    };
+
+    this.audio.onended = () => {
+      if (!loop) {
+        this.clearSessionStorage();
+      }
+    };
+  }
+
+  stopTrack(clearSession = true) {
+    if (this.audio) {
+      this.audio.pause();
+      this.audio = null;
+      this.currentSrc = null;
+    }
+    if (clearSession) {
+      this.clearSessionStorage();
+    }
+  }
+
+  clearSessionStorage() {
+    sessionStorage.removeItem('marvel_audio_src');
+    sessionStorage.removeItem('marvel_audio_time');
+    sessionStorage.removeItem('marvel_audio_timestamp');
+    sessionStorage.removeItem('marvel_audio_loop');
+  }
+
+  restoreSessionAudio(fallbackBgMusic = null) {
+    const src = sessionStorage.getItem('marvel_audio_src');
+    const timeStr = sessionStorage.getItem('marvel_audio_time');
+    const timestampStr = sessionStorage.getItem('marvel_audio_timestamp');
+    const loopStr = sessionStorage.getItem('marvel_audio_loop');
+
+    if (src && timeStr && timestampStr) {
+      const savedTime = parseFloat(timeStr);
+      const timestamp = parseInt(timestampStr, 10);
+      const isLoop = loopStr === 'true';
+
+      const elapsed = (Date.now() - timestamp) / 1000;
+      const targetTime = savedTime + elapsed;
+
+      this.playTrack(src, isLoop, targetTime);
+    } else if (fallbackBgMusic) {
+      this.playTrack(fallbackBgMusic, true, 0);
+    }
+  }
+}
+
+const globalAudio = new GlobalAudioController();
+
+// Navigate with Hero Audio (Plays single-play audio across page navigation)
+function navigateWithHeroSound(event, targetUrl, heroAudioPath) {
+  event.preventDefault();
+
+  if (heroAudioPath) {
+    globalAudio.playTrack(heroAudioPath, false, 0);
+  }
+
+  document.body.classList.remove("page-loaded");
+  document.body.classList.add("page-exiting");
+
+  setTimeout(() => {
+    window.location.href = targetUrl;
+  }, 450);
+}
+
+// Global Page Load Setup
 document.addEventListener("DOMContentLoaded", () => {
-  // Make body visible (fixes blank screen issue)
   document.body.classList.add("page-loaded");
 
-  // Intercept page links for smooth fade-out navigation
-  document.querySelectorAll("a, .back-btn, .portal-card").forEach(link => {
+  document.querySelectorAll("a, .back-btn").forEach(link => {
     link.addEventListener("click", (e) => {
       const href = link.getAttribute("href");
       if (href && !href.startsWith("#") && !href.startsWith("javascript")) {
-        // Skip if handled by navigateWithSound to avoid double execution
-        if (link.getAttribute("onclick") && link.getAttribute("onclick").includes("navigateWithSound")) {
+        if (link.getAttribute("onclick") && link.getAttribute("onclick").includes("navigateWithHeroSound")) {
           return;
         }
         e.preventDefault();
@@ -24,29 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-
-// Navigation controller with sound and fade transition
-function navigateWithSound(event, targetUrl, audioPath, fallbackSynthFunc) {
-  event.preventDefault();
-
-  if (audioPath) {
-    const customAudio = new Audio(audioPath);
-    customAudio.volume = 0.8;
-    customAudio.play().catch(() => {
-      if (typeof fallbackSynthFunc === 'function') fallbackSynthFunc();
-    });
-  } else if (typeof fallbackSynthFunc === 'function') {
-    fallbackSynthFunc();
-  }
-
-  // Trigger smooth fade out
-  document.body.classList.remove("page-loaded");
-  document.body.classList.add("page-exiting");
-
-  setTimeout(() => {
-    window.location.href = targetUrl;
-  }, 600);
-}
 
 // ==========================================
 // 🔑 NOTIFICATION SETUP
@@ -76,16 +164,22 @@ async function sendNotification(subject, message) {
 }
 
 // ==========================================
-// 🔊 AUDIO SYNTHESIZER
+// 🔊 SYNTHESIZER SOUND EFFECTS FOR INTERACTION
 // ==========================================
 class SuperheroAudio {
   constructor() { this.ctx = null; }
   init() {
-    if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) this.ctx = new AudioCtx();
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
   }
 
   playIronMan() {
-    this.init();
+    this.init(); if (!this.ctx) return;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'sawtooth';
@@ -98,7 +192,7 @@ class SuperheroAudio {
   }
 
   playSpidey() {
-    this.init();
+    this.init(); if (!this.ctx) return;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'sine';
@@ -111,7 +205,7 @@ class SuperheroAudio {
   }
 
   playStrange() {
-    this.init();
+    this.init(); if (!this.ctx) return;
     [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -125,7 +219,7 @@ class SuperheroAudio {
   }
 
   playCap() {
-    this.init();
+    this.init(); if (!this.ctx) return;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'square';
@@ -138,7 +232,7 @@ class SuperheroAudio {
   }
 
   playLoki() {
-    this.init();
+    this.init(); if (!this.ctx) return;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'sine';
@@ -150,31 +244,6 @@ class SuperheroAudio {
     osc.connect(gain); gain.connect(this.ctx.destination);
     osc.start(); osc.stop(this.ctx.currentTime + 0.25);
   }
-
-  playThor() {
-    this.init();
-    const osc1 = this.ctx.createOscillator();
-    const osc2 = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-
-    osc1.type = 'sawtooth';
-    osc1.frequency.setValueAtTime(80, this.ctx.currentTime);
-    osc1.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.6);
-
-    osc2.type = 'square';
-    osc2.frequency.setValueAtTime(1200, this.ctx.currentTime);
-    osc2.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.2);
-
-    gain.gain.setValueAtTime(0.35, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.6);
-
-    osc1.connect(gain); osc2.connect(gain);
-    gain.connect(this.ctx.destination);
-
-    osc1.start(); osc2.start();
-    osc1.stop(this.ctx.currentTime + 0.6);
-    osc2.stop(this.ctx.currentTime + 0.6);
-  }
 }
 
 const audio = new SuperheroAudio();
@@ -183,7 +252,7 @@ const audio = new SuperheroAudio();
 // 🕸️ SPIDER-MAN WEB SHOOTER
 // ==========================================
 function shootWebSorry() {
-  audio.playSpidey();
+  globalAudio.playTrack('music/spider_man_web_shot.mp3', false, 0);
   let canvas = document.getElementById('spidey-canvas');
   if (!canvas) return;
 
@@ -248,7 +317,9 @@ function shootWebSorry() {
       ctx.shadowColor = "#ff2a6d";
       ctx.shadowBlur = 30;
       ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-      ctx.font = "900 clamp(2rem, 5vw, 3.8rem) 'Poppins', sans-serif";
+      
+      const fontSize = Math.max(26, Math.min(window.innerWidth * 0.05, 52));
+      ctx.font = `900 ${fontSize}px 'Poppins', sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("🕸️ I AM SORRY! 🕷️", cx, cy);
@@ -267,7 +338,7 @@ function shootWebSorry() {
             ctx.shadowColor = "#ff2a6d";
             ctx.shadowBlur = 30;
             ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-            ctx.font = "900 clamp(2rem, 5vw, 3.8rem) 'Poppins', sans-serif";
+            ctx.font = `900 ${fontSize}px 'Poppins', sans-serif`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText("🕸️ I AM SORRY! 🕷️", cx, cy);
@@ -314,7 +385,11 @@ function triggerConfetti() {
       ctx.fillStyle = p.color;
       ctx.fillRect(p.x, p.y, p.size, p.size);
     });
-    if (pieces.some(p => p.y < canvas.height)) requestAnimationFrame(animate);
+    if (pieces.some(p => p.y < canvas.height)) {
+      requestAnimationFrame(animate);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
   }
   animate();
 }
@@ -377,21 +452,21 @@ function runIntroTimeline() {
   setTimeout(() => {
     const threat = document.getElementById('introThreat');
     if (threat) threat.classList.add('visible');
-  }, 1500);
+  }, 1000);
 
   setTimeout(() => {
     const msg = document.getElementById('introMessage');
     if (msg) msg.classList.add('visible');
-  }, 4200);
+  }, 2800);
 
   setTimeout(() => {
     const btn = document.getElementById('getHelpBtn');
     if (btn) btn.classList.add('visible');
-  }, 7000);
+  }, 4800);
 }
 
 function triggerGetHelpSequence() {
-  audio.playCap();
+  globalAudio.playTrack('music/avengers_assemble.mp3', false, 0);
   starSpeed = 18;
 
   const container = document.querySelector('.intro-container');
@@ -404,29 +479,4 @@ function triggerGetHelpSequence() {
   setTimeout(() => {
     window.location.href = "hub.html";
   }, 900);
-}
-
-// ==========================================
-// 🔊 HERO THEME PLAYER
-// ==========================================
-let currentHeroAudio = null;
-
-function initHeroTheme(audioPath, fallbackSynthFunc) {
-  window.addEventListener('DOMContentLoaded', () => {
-    if (audioPath) {
-      currentHeroAudio = new Audio(audioPath);
-      currentHeroAudio.volume = 0.5;
-      currentHeroAudio.loop = true;
-
-      currentHeroAudio.play().catch(() => {
-        const playOnClick = () => {
-          if (currentHeroAudio) currentHeroAudio.play();
-          window.removeEventListener('click', playOnClick);
-        };
-        window.addEventListener('click', playOnClick);
-      });
-    } else if (typeof fallbackSynthFunc === 'function') {
-      fallbackSynthFunc();
-    }
-  });
 }

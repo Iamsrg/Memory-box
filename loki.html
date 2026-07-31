@@ -10,7 +10,7 @@
 
   <header>
     <a href="hub.html" class="back-btn">← Back to Multiverse Hub</a>
-    <h1 class="title-glow" style="background: linear-gradient(135deg, #00e676, #ffc107); -webkit-background-clip: text;">MULTIVERSAL TREE VAULT</h1>
+    <h1 class="title-glow" style="background: linear-gradient(135deg, #00e676, #ffc107); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MULTIVERSAL TREE VAULT</h1>
     <p class="subtitle">Redeem tokens on alternate tree branches to prune the timeline!</p>
     <button class="action-btn" style="background: var(--tva-orange); font-size:0.85rem; padding:0.5rem 1.2rem; margin-top:0.5rem;" onclick="resetTimelineTree()">Reset Timeline Tree 🔄</button>
   </header>
@@ -69,6 +69,10 @@
 
   <script src="js/main.js"></script>
   <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      globalAudio.restoreSessionAudio();
+    });
+
     const ids = ['boba', 'meal', 'movie', 'argument', 'icecream'];
 
     function checkPrunedState() {
@@ -124,5 +128,3 @@
   </script>
 </body>
 </html>
-
-<script>initHeroTheme('music/loki_ending_theme_ep2.mp3', () => audio.playLoki());</script>

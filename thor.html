@@ -8,12 +8,12 @@
 </head>
 <body>
 
-  <!-- Fullscreen Lightning Shockwave Flash Overlay -->
+  <!-- Fullscreen Lightning Flash Overlay -->
   <div id="lightning-flash"></div>
 
   <header>
     <a href="hub.html" class="back-btn">← Back to Multiverse Hub</a>
-    <h1 class="title-glow" style="background: linear-gradient(135deg, #00f3ff, #ffd700); -webkit-background-clip: text;">THOR ARCHIVE</h1>
+    <h1 class="title-glow" style="background: linear-gradient(135deg, #00f3ff, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">THOR ARCHIVE</h1>
     <p class="subtitle">"I Should Have Sent This On Time." ⚡🔨</p>
   </header>
 
@@ -21,26 +21,26 @@
     
     <div style="font-size: 4rem; margin-bottom: 0.5rem;" id="thorIcon">🔨</div>
 
-    <!-- Thor Quote -->
     <blockquote class="thor-quote">
       "Just like Thor should've gone for Thanos's head, I should've sent this on time."
     </blockquote>
 
-    <!-- Action Button -->
     <div style="margin: 2rem 0;">
       <button class="action-btn thor-btn" id="summonBtn" onclick="summonStormbreaker()">
         Summon Stormbreaker ⚡
       </button>
     </div>
 
-    <!-- Message Box Overlay (Initially Hidden) -->
     <div class="thor-message-box" id="thorMessageBox">
       <div class="message-header">
         ⚡ MESSAGE FROM BIFROST ⚡
       </div>
       <div class="message-content">
-        <!-- EDIT YOUR PERSONAL MESSAGE HERE -->
-        <p>Hey bestie! I know I missed the perfect timing, but like Thor arriving in Wakanda with Stormbreaker, I'm turning the tide now! You mean the world to me and I hope this multiverse vault brings a huge smile to your face! ⚡❤️</p>
+        <p>Hi Zombs,
+I know I'm super late and now I can only give you a belated message.
+But here I am, regardless of things happened between us recently, I really wish you all the things that you are trying so hard to achieve.
+I know its been hard, but the spirit you have that makes you who you are, and that will help you achieve all the things.
+I know, I'm stupid and maybe I don't deserve you, but you are extremely important in my life. I wish all the good things in the world for you, cause you totally deserve it. You're a born fighter, keep fighting, I know you'll be there soon. ⚡❤️</p>
       </div>
     </div>
 
@@ -48,12 +48,13 @@
 
   <script src="js/main.js"></script>
   <script>
-    initHeroTheme('audio/thor.mp3', () => audio.playThor());
+    window.addEventListener('DOMContentLoaded', () => {
+      globalAudio.restoreSessionAudio();
+    });
 
     function summonStormbreaker() {
-      audio.playThor();
+      globalAudio.playTrack('music/mjolnir.mp3', false, 0);
 
-      // Trigger lightning shockwave effect
       const flash = document.getElementById('lightning-flash');
       flash.classList.add('flash-active');
       
@@ -61,11 +62,9 @@
         flash.classList.remove('flash-active');
       }, 400);
 
-      // Reveal Message Box
       const msgBox = document.getElementById('thorMessageBox');
       msgBox.classList.add('visible');
 
-      // Update button state
       const btn = document.getElementById('summonBtn');
       btn.innerText = "STORMBREAKER SUMMONED ⚡";
       btn.disabled = true;

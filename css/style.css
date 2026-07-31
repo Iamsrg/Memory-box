@@ -1,14 +1,7 @@
 /* ==========================================
    🦸 SUPERHERO FONTS & VARIABLES
    ========================================== */
-@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@600;800;900&family=Orbitron:wght@600;800;900&family=Poppins:wght@400;600;800&display=swap');
-
-@font-face {
-  font-family: 'Avengeance';
-  src: url('../fonts/Avengeance.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@600;800;900&family=Orbitron:wght@600;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap');
 
 :root {
   --bg-dark: #0a0c10;
@@ -29,12 +22,20 @@
   --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* 🅰️ AVENGERS INTRO FONT */
-.threat-text, 
-.get-help-btn, 
+/* 🅰️ AVENGERS INTRO & HEADER FONTS */
+.threat-text {
+  font-family: 'Bebas Neue', 'Orbitron', sans-serif !important;
+  letter-spacing: 4px;
+}
+
 .title-glow {
-  font-family: 'Avengeance', 'Cinzel Decorative', 'Bebas Neue', serif !important;
+  font-family: 'Bebas Neue', 'Cinzel Decorative', sans-serif !important;
   letter-spacing: 3px;
+}
+
+.get-help-btn {
+  font-family: 'Orbitron', sans-serif !important;
+  letter-spacing: 2px;
 }
 
 /* 🦾 IRON MAN FONT */
@@ -96,7 +97,7 @@ body.page-exiting {
 header { text-align: center; padding: 2.5rem 1rem 1rem 1rem; max-width: 800px; }
 
 .title-glow {
-  font-size: 2.4rem;
+  font-size: 2.5rem;
   font-weight: 800;
   background: linear-gradient(135deg, #00f3ff, #ff2a6d, #ffc107);
   -webkit-background-clip: text;
@@ -154,6 +155,7 @@ header { text-align: center; padding: 2.5rem 1rem 1rem 1rem; max-width: 800px; }
   align-items: center;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .portal-card:hover { transform: translateY(-10px) scale(1.02); }
@@ -269,7 +271,7 @@ header { text-align: center; padding: 2.5rem 1rem 1rem 1rem; max-width: 800px; }
   transform: translate(-50%, -50%) scale(1) rotate(-15deg);
 }
 
-/* Spider-Man 3D Photo Flip Cards & Photo Fitting */
+/* Spider-Man 3D Photo Flip Cards */
 .spidey-photo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -528,21 +530,24 @@ header { text-align: center; padding: 2.5rem 1rem 1rem 1rem; max-width: 800px; }
 }
 
 .threat-text {
-  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-size: clamp(2rem, 5.5vw, 3.8rem);
   font-weight: 900;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
   background: linear-gradient(135deg, #ff2a6d, #ffd700, #00f3ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(255, 42, 109, 0.5);
+  text-shadow: 0 0 35px rgba(255, 42, 109, 0.6), 0 0 70px rgba(0, 243, 255, 0.4);
   margin-bottom: 1.5rem;
+  line-height: 1.2;
 }
 
 .message-text {
-  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  font-size: clamp(1.1rem, 2.2vw, 1.55rem);
   color: #e0e6ed;
+  font-family: 'Poppins', sans-serif;
   font-weight: 500;
-  line-height: 1.6;
+  line-height: 1.7;
   text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
   margin-bottom: 2.5rem;
 }

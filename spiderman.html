@@ -12,7 +12,7 @@
 
   <header>
     <a href="hub.html" class="back-btn">← Back to Multiverse Hub</a>
-    <h1 class="title-glow" style="background: linear-gradient(135deg, #ff2a6d, #05d5e8); -webkit-background-clip: text;">SPIDEY MEMORY WEB</h1>
+    <h1 class="title-glow" style="background: linear-gradient(135deg, #ff2a6d, #05d5e8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SPIDEY MEMORY WEB</h1>
     <p class="subtitle">Flip photos or fire the Web Shooter!</p>
   </header>
 
@@ -98,7 +98,10 @@
   </main>
 
   <script src="js/main.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      globalAudio.restoreSessionAudio();
+    });
+  </script>
 </body>
 </html>
-
-<script>initHeroTheme('music/spider_man_web_shot.mp3', () => audio.playSpidey());</script>

@@ -17,7 +17,7 @@
     
     <!-- 1. Iron Man -->
     <a href="ironman.html" class="portal-card ironman-theme" 
-       onclick="navigateWithSound(event, 'ironman.html', 'music/ironman.mp3', () => audio.playIronMan())">
+       onclick="navigateWithHeroSound(event, 'ironman.html', 'music/mr_tinystark-iron-man-repulsor-157371.mp3')">
       <div class="portal-icon">🦾</div>
       <h2>Iron Man Node</h2>
       <p>"Proof That We Have A Heart" & Arc Reactor Power</p>
@@ -25,7 +25,7 @@
 
     <!-- 2. Spider-Man -->
     <a href="spiderman.html" class="portal-card spidey-theme" 
-       onclick="navigateWithSound(event, 'spiderman.html', 'music/spiderman.mp3', () => audio.playSpidey())">
+       onclick="navigateWithHeroSound(event, 'spiderman.html', 'music/spider_man_web_shot.mp3')">
       <div class="portal-icon">🕷️</div>
       <h2>Spider-Man Web</h2>
       <p>Hexagonal Web Shooter & Photo Memory Flip Cards</p>
@@ -33,15 +33,15 @@
 
     <!-- 3. Doctor Strange -->
     <a href="doctorstrange.html" class="portal-card strange-theme" 
-       onclick="navigateWithSound(event, 'doctorstrange.html', 'music/doctorstrange.mp3', () => audio.playStrange())">
+       onclick="navigateWithHeroSound(event, 'doctorstrange.html', 'music/im_doctor_strange.mp3')">
       <div class="portal-icon">🔮</div>
       <h2>Doctor Strange Portal</h2>
       <p>14,000,605 Futures... Time Loop & Stone Slider</p>
     </a>
 
-    <!-- 4. Thor (Placed directly below Doctor Strange!) -->
+    <!-- 4. Thor -->
     <a href="thor.html" class="portal-card thor-theme" 
-       onclick="navigateWithSound(event, 'thor.html', 'music/thor.mp3', () => audio.playThor())">
+       onclick="navigateWithHeroSound(event, 'thor.html', 'music/thor.mp3')">
       <div class="portal-icon">⚡</div>
       <h2>Thor's Lightning Realm</h2>
       <p>Asgardian Message</p>
@@ -49,7 +49,7 @@
 
     <!-- 5. Captain America -->
     <a href="captainamerica.html" class="portal-card cap-theme" 
-       onclick="navigateWithSound(event, 'captainamerica.html', 'music/captainamerica.mp3', () => audio.playCap())">
+       onclick="navigateWithHeroSound(event, 'captainamerica.html', 'music/i-can-do-this-all-day-captain-america.mp3')">
       <div class="portal-icon">🛡️</div>
       <h2>Cap's Peace Accords</h2>
       <p>Strategic Truce Brief & Official Apology Accord</p>
@@ -57,7 +57,7 @@
 
     <!-- 6. Loki -->
     <a href="loki.html" class="portal-card loki-theme" 
-       onclick="navigateWithSound(event, 'loki.html', 'music/loki.mp3', () => audio.playLoki())">
+       onclick="navigateWithHeroSound(event, 'loki.html', 'music/Loki_Finale_15s_to_30s(1).mp3')">
       <div class="portal-icon">👑</div>
       <h2>Loki's Multiverse Tree</h2>
       <p>Yggdrasil Timeline Branches & Redeemable Tokens</p>
@@ -66,5 +66,10 @@
   </main>
 
   <script src="js/main.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      globalAudio.restoreSessionAudio('music/avengers_theme.mp3');
+    });
+  </script>
 </body>
 </html>

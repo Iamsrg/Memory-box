@@ -12,7 +12,7 @@
 
   <header>
     <a href="hub.html" class="back-btn">← Back to Multiverse Hub</a>
-    <h1 class="title-glow" style="background: linear-gradient(135deg, #e63946, #1d3557); -webkit-background-clip: text;">THE PEACE ACCORDS</h1>
+    <h1 class="title-glow" style="background: linear-gradient(135deg, #e63946, #1d3557); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">THE PEACE ACCORDS</h1>
     <p class="subtitle">"I can apologize for this all day."</p>
   </header>
 
@@ -35,6 +35,10 @@
 
   <script src="js/main.js"></script>
   <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      globalAudio.restoreSessionAudio();
+    });
+
     function signAccord() {
       audio.playCap();
       triggerConfetti();
@@ -49,6 +53,5 @@
       sendNotification("🛡️ S.H.I.E.L.D. Alert: Peace Accord Signed!", "Your best friend just officially signed and ratified Cap's Peace Accord on the website!");
     }
   </script>
-<script>initHeroTheme('music/i-can-do-this-all-day-captain-america.mp3', () => audio.playCap());</script>  
 </body>
 </html>

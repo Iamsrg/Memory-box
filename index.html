@@ -32,10 +32,10 @@
 
   <script src="js/main.js"></script>
   <script>
-    // Initialize stars particle background & text animation timeline on page load
     window.addEventListener('DOMContentLoaded', () => {
       initStarfield();
       runIntroTimeline();
+      globalAudio.restoreSessionAudio('music/avengers_theme.mp3');
     });
   </script>
 </body>
