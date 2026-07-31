@@ -5,6 +5,7 @@ class GlobalAudioController {
   constructor() {
     this.audio = null;
     this.currentSrc = null;
+    this.fallbackBg = 'music/avengers_theme.mp3';
   }
 
   playTrack(src, loop = false, startOffset = 0) {
@@ -21,7 +22,7 @@ class GlobalAudioController {
     this.audio.loop = loop;
     this.audio.volume = 0.8;
 
-    if (startOffset > 0) {
+    if (startOffset > 0 && !isNaN(startOffset)) {
       this.audio.currentTime = startOffset;
     }
 
@@ -33,13 +34,13 @@ class GlobalAudioController {
     const playPromise = this.audio.play();
     if (playPromise !== undefined) {
       playPromise.catch(() => {
-        const handleUserGesture = () => {
+        const unlockAudioOnGesture = () => {
           if (this.audio) this.audio.play().catch(() => {});
-          window.removeEventListener('click', handleUserGesture);
-          window.removeEventListener('touchstart', handleUserGesture);
+          window.removeEventListener('click', unlockAudioOnGesture);
+          window.removeEventListener('touchstart', unlockAudioOnGesture);
         };
-        window.addEventListener('click', handleUserGesture);
-        window.addEventListener('touchstart', handleUserGesture);
+        window.addEventListener('click', unlockAudioOnGesture);
+        window.addEventListener('touchstart', unlockAudioOnGesture);
       });
     }
 
@@ -53,6 +54,10 @@ class GlobalAudioController {
     this.audio.onended = () => {
       if (!loop) {
         this.clearSessionStorage();
+        // Automatically switch back to background music on hub or root
+        if (window.location.pathname.includes('hub.html') || window.location.pathname.endsWith('/')) {
+          this.playTrack(this.fallbackBg, true, 0);
+        }
       }
     };
   }
@@ -75,7 +80,9 @@ class GlobalAudioController {
     sessionStorage.removeItem('marvel_audio_loop');
   }
 
-  restoreSessionAudio(fallbackBgMusic = null) {
+  restoreSessionAudio(defaultBg = null) {
+    if (defaultBg) this.fallbackBg = defaultBg;
+
     const src = sessionStorage.getItem('marvel_audio_src');
     const timeStr = sessionStorage.getItem('marvel_audio_time');
     const timestampStr = sessionStorage.getItem('marvel_audio_timestamp');
@@ -89,16 +96,24 @@ class GlobalAudioController {
       const elapsed = (Date.now() - timestamp) / 1000;
       const targetTime = savedTime + elapsed;
 
-      this.playTrack(src, isLoop, targetTime);
-    } else if (fallbackBgMusic) {
-      this.playTrack(fallbackBgMusic, true, 0);
+      // If a single sound clip finished during transition, fallback to theme music
+      if (!isLoop && targetTime > 8) {
+        this.clearSessionStorage();
+        if (defaultBg) {
+          this.playTrack(defaultBg, true, 0);
+        }
+      } else {
+        this.playTrack(src, isLoop, targetTime);
+      }
+    } else if (defaultBg) {
+      this.playTrack(defaultBg, true, 0);
     }
   }
 }
 
 const globalAudio = new GlobalAudioController();
 
-// Navigate with Hero Audio (Plays single-play audio across page navigation)
+// Navigate with Hero Audio
 function navigateWithHeroSound(event, targetUrl, heroAudioPath) {
   event.preventDefault();
 
@@ -139,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================
 // 🔑 NOTIFICATION SETUP
 // ==========================================
-const WEB3FORMS_ACCESS_KEY = "YOUR_ACCESS_KEY_HERE"; // Get free at web3forms.com
+const WEB3FORMS_ACCESS_KEY = "YOUR_ACCESS_KEY_HERE";
 
 async function sendNotification(subject, message) {
   if (WEB3FORMS_ACCESS_KEY === "YOUR_ACCESS_KEY_HERE") {

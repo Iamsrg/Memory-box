@@ -35,7 +35,19 @@
     window.addEventListener('DOMContentLoaded', () => {
       initStarfield();
       runIntroTimeline();
-      globalAudio.restoreSessionAudio('music/avengers_theme.mp3');
+
+      // Automatically start Avengers Theme on load
+      globalAudio.playTrack('music/avengers_theme.mp3', true, 0);
+
+      // Instant gesture listener to bypass browser autoplay blocks
+      const unlockAudio = () => {
+        globalAudio.playTrack('music/avengers_theme.mp3', true, 0);
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('touchstart', unlockAudio);
+      };
+
+      document.addEventListener('click', unlockAudio);
+      document.addEventListener('touchstart', unlockAudio);
     });
   </script>
 </body>
